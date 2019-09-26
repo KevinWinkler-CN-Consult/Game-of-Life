@@ -8,7 +8,7 @@ namespace GOL\Boards;
  * Use grid() to retrieve the current grid and setGrid() to apply all changes.
  *
  * The size of the actual working area is the size -2 due to a margin to remove
- * out of bounds check in getNeighbours() if the given cell is on the border.
+ * out of bounds check in getNeighbours() if the given cell would be on the border.
  */
 class BoardRandom extends Board
 {

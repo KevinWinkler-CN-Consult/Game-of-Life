@@ -8,7 +8,7 @@ namespace GOL\Boards;
  * Use grid() to retrieve the current grid and setGrid() to apply all changes.
  *
  * The size of the actual working area is the size -2 due to a margin to remove
- * out of bounds check in getNeighbours() if the given cell is on the border.
+ * out of bounds check in getNeighbours() if the given cell would be on the border.
  */
 class Board
 {
@@ -50,7 +50,7 @@ class Board
 
     /**
      * Returns the board.
-     * @return array.
+     * @return array 2d array with width and height of the board.
      */
     public function grid()
     {
@@ -81,7 +81,7 @@ class Board
      */
     public function setGrid(array $_grid)
     {
-        //prevent out of bounds or implement in board buffer
+        //TODO:prevent out of bounds or implement in board buffer
         for ($x = 0; $x < $this->height; $x++)
             for ($y = 0; $y < $this->width; $y++)
                 $this->grid[$x][$y] = $_grid[$x][$y];
@@ -94,20 +94,23 @@ class Board
      *
      * @param $_x int y coordinate of the specific cell
      * @param $_y int y coordinate of the specific cell
-     * @return int amount of living cells and -1 if cell is out of bounds.
+     * @return int amount of living cells and -1 if given cell is out of bounds or on the margin.
      */
-    public function getNeighbours($_x, $_y)
+    public function countLivingNeighbours($_x, $_y)
     {
-        if( $_x < 1 || $_y < 1 || $_x > $this->width-1 || $_y > $this->height-1)
+        // out of bounds and margin check
+        if ($_x < 1 || $_y < 1 || $_x > $this->width - 1 || $_y > $this->height - 1)
             return -1;
 
-        $indices = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
-        $neighbourCount = 0;
+        $relativeNeighbourIndices = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
+        $livingNeighbourCount = 0;
 
-        for ($i = 0; $i < count($indices); $i++)
-            if ($this->grid[$_x + $indices[$i][0]][$_y + $indices[$i][1]] == 1)
-                $neighbourCount++;
+        foreach ($relativeNeighbourIndices as $relativeNeighbour)
+        {
+            if ($this->grid[$_x + $relativeNeighbour[0]][$_y + $relativeNeighbour[1]] == 1)
+                $livingNeighbourCount++;
+        }
 
-        return $neighbourCount;
+        return $livingNeighbourCount;
     }
 }

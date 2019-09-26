@@ -6,7 +6,7 @@ namespace GOL\Boards;
  * Tracks previous version of a board.
  *
  * Use compare() to compare the current board with the previous versions.
- * Use push() to add the current board to the history and pop() to remove the oldest field.
+ * Use push() to add the current board to the history and pop() to remove the oldest board.
  */
 class History
 {
@@ -23,29 +23,30 @@ class History
     /**
      * Compares the current board with the history.
      *
-     * @returns true if one of the previous boards is equal to to current, false otherwise.
+     * @param Board $_board board to check.
+     * @return bool true if one of the previous boards is equal to to current board, false otherwise.
      */
     public function compare(Board $_board)
     {
         foreach ($this->previousBoards as $previousBoard)
         {
-            $equal = false;
+            $equal = true;
 
             for ($y = 0; $y < $_board->height(); $y++)
             {
                 for ($x = 0; $x < $_board->width(); $x++)
                 {
-                    if( $previousBoard->grid()[$x][$y] != $_board->grid()[$x][$y] )
+                    if ($previousBoard->grid()[$x][$y] != $_board->grid()[$x][$y])
                     {
-                        $equal = true;
+                        $equal = false;
                     }
                 }
             }
 
-            if($equal == false)
-                return 0;
+            if ($equal)
+                return true;
         }
-        return 1;
+        return false;
     }
 
     /**
@@ -55,7 +56,7 @@ class History
     public function push(Board $board)
     {
         $temp = clone $board;
-        array_unshift($this->previousBoards,$temp);
+        array_unshift($this->previousBoards, $temp);
     }
 
     /**

@@ -80,7 +80,7 @@ function nextGeneration(Board &$_board, Rule &$_rule)
 
     for ($y = 1; $y < $_board->height() - 1; $y++)
         for ($x = 1; $x < $_board->width() - 1; $x++)
-            $buffer[$x][$y] = $_rule->applyRule($_board->getNeighbours($x, $y), $_board->grid()[$x][$y]);
+            $buffer[$x][$y] = $_rule->applyRule($_board->countLivingNeighbours($x, $y), $_board->grid()[$x][$y]);
 
     $_board->setGrid($buffer);
 }
@@ -93,10 +93,10 @@ for ($i = 0; $i < $maxIteration; $i++)
     $field->printBoard();
     nextGeneration($field, $rule);
 
-    if($history->stackSize() > 2)
+    if ($history->stackSize() > 2)
         $history->pop();
 
-    if( !$history->compare($field) )
+    if ($history->compare($field))
         break;
 
     $history->push($field);
