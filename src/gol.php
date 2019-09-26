@@ -3,6 +3,7 @@
 use GOL\Boards\Board;
 use GOL\Boards\BoardGlider;
 use GOL\Boards\BoardRandom;
+use GOL\Boards\History;
 use GOL\Rule;
 use Ulrichsg\Getopt;
 
@@ -10,7 +11,7 @@ require_once "include.php";
 require_once "ulrichsg/getopt.php";
 
 $maxIteration = 21;
-$version = "1.0";
+$version = "1.1";
 $width = 10;
 $height = 10;
 
@@ -84,9 +85,19 @@ function nextGeneration(Board &$_board, Rule &$_rule)
     $_board->setGrid($buffer);
 }
 
+$history = new History($field);
+
 for ($i = 0; $i < $maxIteration; $i++)
 {
     echo "Generation:$i\n";
     $field->printBoard();
     nextGeneration($field, $rule);
+
+    if($history->stackSize() > 2)
+        $history->pop();
+
+    if( !$history->compare($field) )
+        break;
+
+    $history->push($field);
 }
