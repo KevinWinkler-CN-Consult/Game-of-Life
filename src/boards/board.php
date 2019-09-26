@@ -30,7 +30,7 @@ class Board
         {
             for ($x = 0; $x < $_width; $x++)
             {
-                $this->grid[$y][$x] = 0;
+                $this->grid[$x][$y] = 0;
             }
         }
     }
@@ -43,7 +43,7 @@ class Board
         for ($y = 0; $y < $this->height; $y++)
         {
             for ($x = 0; $x < $this->width; $x++)
-                echo $this->grid[$y][$x] ? "O" : "-";
+                echo $this->grid[$x][$y] ? "O" : "-";
             echo "\n";
         }
     }
@@ -92,11 +92,11 @@ class Board
      *
      * No out of bound check due to the margin.
      *
-     * @param $_y int y coordinate of the specific cell
      * @param $_x int y coordinate of the specific cell
+     * @param $_y int y coordinate of the specific cell
      * @return int amount of living cells and -1 if cell is out of bounds.
      */
-    public function getNeighbours($_y, $_x)
+    public function getNeighbours($_x, $_y)
     {
         if( $_x < 1 || $_y < 1 || $_x > $this->width-1 || $_y > $this->height-1)
             return -1;
@@ -105,7 +105,7 @@ class Board
         $neighbourCount = 0;
 
         for ($i = 0; $i < count($indices); $i++)
-            if ($this->grid[$_y + $indices[$i][0]][$_x + $indices[$i][1]] == 1)
+            if ($this->grid[$_x + $indices[$i][0]][$_y + $indices[$i][1]] == 1)
                 $neighbourCount++;
 
         return $neighbourCount;

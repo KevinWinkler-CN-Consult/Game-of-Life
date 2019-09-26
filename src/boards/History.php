@@ -35,7 +35,7 @@ class History
             {
                 for ($x = 0; $x < $_board->width(); $x++)
                 {
-                    if( $previousBoard->grid()[$y][$x] != $_board->grid()[$y][$x] )
+                    if( $previousBoard->grid()[$x][$y] != $_board->grid()[$x][$y] )
                     {
                         $equal = true;
                     }
@@ -54,8 +54,8 @@ class History
      */
     public function push(Board $board)
     {
-        $t = clone $board;
-        array_unshift($this->previousBoards,$t);
+        $temp = clone $board;
+        array_unshift($this->previousBoards,$temp);
     }
 
     /**

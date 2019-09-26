@@ -25,7 +25,7 @@ class BoardRandom extends Board
         {
             for ($x = 1; $x < $_width - 1; $x++)
             {
-                $this->grid[$y][$x] = rand(0, 1);
+                $this->grid[$x][$y] = rand(0, 1);
             }
         }
     }

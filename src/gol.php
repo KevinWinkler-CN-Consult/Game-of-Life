@@ -80,7 +80,7 @@ function nextGeneration(Board &$_board, Rule &$_rule)
 
     for ($y = 1; $y < $_board->height() - 1; $y++)
         for ($x = 1; $x < $_board->width() - 1; $x++)
-            $buffer[$y][$x] = $_rule->applyRule($_board->getNeighbours($y, $x), $_board->grid()[$y][$x]);
+            $buffer[$x][$y] = $_rule->applyRule($_board->getNeighbours($x, $y), $_board->grid()[$x][$y]);
 
     $_board->setGrid($buffer);
 }

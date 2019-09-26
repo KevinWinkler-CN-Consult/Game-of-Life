@@ -24,15 +24,15 @@ class BoardGlider extends Board
         if ($_width >= 5 && $_height >= 5)
         {
             $this->grid[1][1]=0;
-            $this->grid[1][2]=1;
-            $this->grid[1][3]=0;
+            $this->grid[2][1]=1;
+            $this->grid[3][1]=0;
 
-            $this->grid[2][1]=0;
+            $this->grid[1][2]=0;
             $this->grid[2][2]=0;
-            $this->grid[2][3]=1;
-
-            $this->grid[3][1]=1;
             $this->grid[3][2]=1;
+
+            $this->grid[1][3]=1;
+            $this->grid[2][3]=1;
             $this->grid[3][3]=1;
         }
     }
