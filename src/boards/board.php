@@ -2,28 +2,30 @@
 
 namespace GOL\Boards;
 
+use GOL\Rule;
+
 /**
  * Represents a Game of Life world.
  *
- * Use grid() to retrieve the current grid and setGrid() to apply all changes.
- *
- * The size of the actual working area is the size -2 due to a margin to remove
- * out of bounds check in getNeighbours() if the given cell would be on the border.
+ * Use print() to print the board and nextGeneration() to calculate the next generation.
  */
 class Board
 {
     protected $grid;
     protected $width;
     protected $height;
+    protected $rule;
 
     /**
      * @param $_width int Width of the Board with margin.
      * @param $_height int Height af the Board with margin.
+     * @param Rule $_rule rule used to generate the next generation.
      */
-    public function __construct($_width, $_height)
+    public function __construct($_width, $_height, Rule $_rule)
     {
         $this->width = $_width;
         $this->height = $_height;
+        $this->rule = $_rule;
 
         // initialize the board
         for ($y = 0; $y < $_height; $y++)
@@ -46,6 +48,20 @@ class Board
                 echo $this->grid[$x][$y] ? "O" : "-";
             echo "\n";
         }
+    }
+
+    /**
+     * Runs the Game of Life algorithm.
+     */
+    public function nextGeneration()
+    {
+        $buffer = $this->grid;
+
+        for ($y = 1; $y < $this->height - 1; $y++)
+            for ($x = 1; $x < $this->width - 1; $x++)
+                $buffer[$x][$y] = $this->rule->applyRule($this->countLivingNeighbours($x, $y), $this->grid[$x][$y]);
+
+        $this->grid = $buffer;
     }
 
     /**
@@ -73,18 +89,6 @@ class Board
     public function height()
     {
         return $this->height;
-    }
-
-    /**
-     * Overrides the current grid.
-     * @param array $_grid Source data.
-     */
-    public function setGrid(array $_grid)
-    {
-        //TODO:prevent out of bounds or implement in board buffer
-        for ($x = 0; $x < $this->height; $x++)
-            for ($y = 0; $y < $this->width; $y++)
-                $this->grid[$x][$y] = $_grid[$x][$y];
     }
 
     /**

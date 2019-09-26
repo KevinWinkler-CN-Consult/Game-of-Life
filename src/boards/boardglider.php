@@ -2,6 +2,8 @@
 
 namespace GOL\Boards;
 
+use GOL\Rule;
+
 /**
  * Represents a Game of Life world filled with a glider in the top left corner.
  *
@@ -13,12 +15,13 @@ namespace GOL\Boards;
 class BoardGlider extends Board
 {
     /**
-     * @param $_width int Width of the Board.
-     * @param $_height int Height af the Board.
+     * @param $_width int Width of the Board with margin.
+     * @param $_height int Height af the Board with margin.
+     * @param Rule $_rule rule used to generate the next generation.
      */
-    function __construct($_width, $_height)
+    function __construct($_width, $_height, Rule $_rule)
     {
-        parent::__construct($_width, $_height);
+        parent::__construct($_width, $_height, $_rule);
 
         // fill the board with a glider if the board is big enough
         if ($_width >= 5 && $_height >= 5)

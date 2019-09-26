@@ -1,9 +1,10 @@
 <?php
 
 use GOL\Boards\Board;
+use GOL\Boards\BoardAcorn;
 use GOL\Boards\BoardGlider;
 use GOL\Boards\BoardRandom;
-use GOL\Boards\History;
+use GOL\Boards\history;
 use GOL\Rule;
 use Ulrichsg\Getopt;
 
@@ -27,7 +28,8 @@ $getOpt = new Getopt(
         [null, 'height', Getopt::REQUIRED_ARGUMENT, "Height of the board"],
         ['m', 'maxIteration', Getopt::REQUIRED_ARGUMENT, "Maximum number of iteration"],
         [null, 'startRandom', Getopt::NO_ARGUMENT, "Start with random values"],
-        [null, 'startGlider', Getopt::NO_ARGUMENT, "Start with a glider in the upper left corner"]
+        [null, 'startGlider', Getopt::NO_ARGUMENT, "Start with a glider in the upper left corner"],
+        [null, 'startAcorn', Getopt::NO_ARGUMENT, "Start with an acorn in the center"]
     ]);
 
 $getOpt->parse();
@@ -63,35 +65,28 @@ if ($getOpt->getOption('m'))
 
 if ($getOpt->getOption("startRandom"))
 {
-    $field = new BoardRandom($width, $height);
+    $field = new BoardRandom($width, $height, $rule);
 }
 else if ($getOpt->getOption("startGlider"))
 {
-    $field = new BoardGlider($width, $height);
+    $field = new BoardGlider($width, $height, $rule);
+}
+else if ($getOpt->getOption("startAcorn"))
+{
+    $field = new BoardGlider($width, $height, $rule);
 }
 else
 {
-    $field = new BoardGlider($width, $height);
+    $field = new BoardAcorn($width, $height ,$rule);
 }
 
-function nextGeneration(Board &$_board, Rule &$_rule)
-{
-    $buffer = $_board->grid();
-
-    for ($y = 1; $y < $_board->height() - 1; $y++)
-        for ($x = 1; $x < $_board->width() - 1; $x++)
-            $buffer[$x][$y] = $_rule->applyRule($_board->countLivingNeighbours($x, $y), $_board->grid()[$x][$y]);
-
-    $_board->setGrid($buffer);
-}
-
-$history = new History($field);
+$history = new history($field);
 
 for ($i = 0; $i < $maxIteration; $i++)
 {
     echo "Generation:$i\n";
     $field->printBoard();
-    nextGeneration($field, $rule);
+    $field->nextGeneration();
 
     if ($history->stackSize() > 2)
         $history->pop();

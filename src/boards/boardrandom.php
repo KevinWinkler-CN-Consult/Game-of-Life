@@ -2,6 +2,8 @@
 
 namespace GOL\Boards;
 
+use GOL\Rule;
+
 /**
  * Represents a Game of Life world filled randomly with values of 1 or 0.
  *
@@ -13,12 +15,13 @@ namespace GOL\Boards;
 class BoardRandom extends Board
 {
     /**
-     * @param $_width int Width of the Board.
-     * @param $_height int Height af the Board.
+     * @param $_width int Width of the Board with margin.
+     * @param $_height int Height af the Board with margin.
+     * @param Rule $_rule rule used to generate the next generation.
      */
-    function __construct($_width, $_height)
+    function __construct($_width, $_height, Rule $_rule)
     {
-        parent::__construct($_width, $_height);
+        parent::__construct($_width, $_height, $_rule);
 
         // fill the board with random zeros or ones
         for ($y = 1; $y < $_height - 1; $y++)
