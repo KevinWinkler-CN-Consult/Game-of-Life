@@ -1,81 +1,98 @@
 <?php
 
-$field = array();
-$size = 52;
-$birth = [3];
-$survival = [2,3];
+use GOL\Boards\Board;
+use GOL\Boards\BoardAcorn;
+use GOL\Boards\BoardGlider;
+use GOL\Boards\BoardRandom;
+use GOL\Boards\history;
+use GOL\Rule;
+use Ulrichsg\Getopt;
 
-for($y = 0; $y< $size; $y++)
+require_once "include.php";
+require_once "ulrichsg/getopt.php";
+
+$maxIteration = 21;
+$version = "1.1";
+$width = 10;
+$height = 10;
+
+$field = null;
+$rule = new Rule([3], [2, 3]);
+
+$getOpt = new Getopt(
+    [
+        ['h', 'help', Getopt::NO_ARGUMENT, "Prints this page"],
+        ['v', 'version', Getopt::NO_ARGUMENT, "Prints the version at program start"],
+
+        [null, 'width', Getopt::REQUIRED_ARGUMENT, "Width of the board"],
+        [null, 'height', Getopt::REQUIRED_ARGUMENT, "Height of the board"],
+        ['m', 'maxIteration', Getopt::REQUIRED_ARGUMENT, "Maximum number of iteration"],
+        [null, 'startRandom', Getopt::NO_ARGUMENT, "Start with random values"],
+        [null, 'startGlider', Getopt::NO_ARGUMENT, "Start with a glider in the upper left corner"],
+        [null, 'startAcorn', Getopt::NO_ARGUMENT, "Start with an acorn in the center"]
+    ]);
+
+$getOpt->parse();
+
+if ($getOpt->getOption('h'))
 {
-	for($x = 0; $x < $size; $x++)
-	{
-		$field[$y][$x] = 0;
-	}
+    $getOpt->showHelp();
+    die;
+}
+if ($getOpt->getOption('v'))
+{
+    echo "Game of Life algorithm in php.\n" .
+        "Version $version \n";
+    die;
 }
 
-for($y = 1; $y < $size-1; $y++)
+if ($getOpt->getOption('width'))
 {
-	for($x = 1; $x < $size-1; $x++)
-	{
-		$field[$y][$x] = (int)rand(0,1);
-	}
+    $width = intval($getOpt->getOption('width'));
+    if ($width == 0)
+        $width = 10;
+}
+if ($getOpt->getOption('height'))
+{
+    $height = intval($getOpt->getOption('height'));
+    if ($height == 0)
+        $height = 10;
+}
+if ($getOpt->getOption('m'))
+{
+    $maxIteration = intval($getOpt->getOption('m'));
 }
 
-function printField($_field)
+if ($getOpt->getOption("startRandom"))
 {
-	global $size;
-	
-	for($y = 0; $y < $size; $y++)
-	{
-		for($x = 0; $x < $size; $x++)
-			echo $_field[$y][$x] ? "O" : " ";
-		echo "\n";
-	}
+    $field = new BoardRandom($width, $height, $rule);
+}
+else if ($getOpt->getOption("startGlider"))
+{
+    $field = new BoardGlider($width, $height, $rule);
+}
+else if ($getOpt->getOption("startAcorn"))
+{
+    $field = new BoardGlider($width, $height, $rule);
+}
+else
+{
+    $field = new BoardAcorn($width, $height ,$rule);
 }
 
-function nextGeneration(&$_field)
+$history = new history($field);
+
+for ($i = 0; $i < $maxIteration; $i++)
 {
-	global $size;
-	global $birth;
-	global $survival;
-	$buffer = array();
-	
-	for($y = 0; $y < $size; $y++)
-		for($x = 0; $x < $size; $x++)
-			$buffer[$y][$x] = 0;
-		
-	for($y = 1; $y < $size-1; $y++)
-	{
-		for($x = 1; $x < $size-1; $x++)
-		{
-			$indecies = [ [-1,-1], [0,-1], [1,-1], [-1,0], [1,0], [-1,1], [0,1], [1,1] ];
-			$neighbourCount = 0;
-			
-			for($i = 0; $i<8 ;$i++)
-				if($_field[$y+$indecies[$i][0]][$x+$indecies[$i][1]] == 1)
-					$neighbourCount++;
-			
-			foreach($birth as $b)
-				if($neighbourCount == $b)
-					$buffer[$y][$x] = 1;
-					
-			foreach($survival as $s)
-				if($neighbourCount == $s && $_field[$y][$x] == 1)
-					$buffer[$y][$x] = 1;
-		}
-	}
-	
-	for($x = 0; $x < $size; $x++)
-		for($y = 0; $y < $size; $y++)
-			$_field[$x][$y] = $buffer[$x][$y];
-}
+    echo "Generation:$i\n";
+    $field->printBoard();
+    $field->nextGeneration();
 
+    if ($history->stackSize() > 2)
+        $history->pop();
 
+    if ($history->compare($field))
+        break;
 
-printField($field);
-for( $i = 0; $i < 10;$i++)
-{
-echo "Next Gen\n";
-nextGeneration($field);
-printField($field);
+    $history->push($field);
 }
