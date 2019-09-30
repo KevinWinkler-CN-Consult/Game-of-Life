@@ -30,20 +30,7 @@ class history
     {
         foreach ($this->previousBoards as $previousBoard)
         {
-            $equal = true;
-
-            for ($y = 0; $y < $_board->height(); $y++)
-            {
-                for ($x = 0; $x < $_board->width(); $x++)
-                {
-                    if ($previousBoard->grid()[$x][$y] != $_board->grid()[$x][$y])
-                    {
-                        $equal = false;
-                    }
-                }
-            }
-
-            if ($equal)
+            if($_board->compare($previousBoard))
                 return true;
         }
         return false;

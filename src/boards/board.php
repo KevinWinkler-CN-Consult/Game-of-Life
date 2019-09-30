@@ -2,8 +2,6 @@
 
 namespace GOL\Boards;
 
-use GOL\Rule;
-
 /**
  * Represents a Game of Life world.
  *
@@ -14,18 +12,15 @@ class Board
     protected $grid;
     protected $width;
     protected $height;
-    protected $rule;
 
     /**
-     * @param $_width int Width of the Board with margin.
-     * @param $_height int Height af the Board with margin.
-     * @param Rule $_rule rule used to generate the next generation.
+     * @param int $_width Width of the Board with margin.
+     * @param int $_height Height af the Board with margin.
      */
-    public function __construct($_width, $_height, Rule $_rule)
+    public function __construct($_width, $_height)
     {
         $this->width = $_width;
         $this->height = $_height;
-        $this->rule = $_rule;
 
         // initialize the board
         for ($y = 0; $y < $_height; $y++)
@@ -59,18 +54,35 @@ class Board
 
         for ($y = 1; $y < $this->height - 1; $y++)
             for ($x = 1; $x < $this->width - 1; $x++)
-                $buffer[$x][$y] = $this->rule->applyRule($this->countLivingNeighbours($x, $y), $this->grid[$x][$y]);
+                $buffer[$x][$y] = $this->applyRule($this->countLivingNeighbours($x, $y), $this->grid[$x][$y]);
 
         $this->grid = $buffer;
     }
 
     /**
-     * Returns the board.
-     * @return array 2d array with width and height of the board.
+     * @param int $_numNeighbours Number of living cells in the neighbourhood.
+     * @param bool $_isAlive State of the current cell.
+     * @return int State of the cell in the next generation.
      */
-    public function grid()
+    private function applyRule($_numNeighbours, $_isAlive)
     {
-        return $this->grid;
+        $survival = [2,3];
+        $birth = [3];
+
+        if ($_isAlive)
+        {
+            foreach ($survival as $s)
+                if ($_numNeighbours == $s)
+                    return 1;
+        }
+        else
+        {
+            foreach ($birth as $b)
+                if ($_numNeighbours == $b)
+                    return 1;
+        }
+
+        return 0;
     }
 
     /**
@@ -83,8 +95,8 @@ class Board
     }
 
     /**
-     * Returns the size of the board.
-     * @return int Size of the board.
+     * Returns the height of the board including the margin.
+     * @return int height of the board.
      */
     public function height()
     {
@@ -96,11 +108,11 @@ class Board
      *
      * No out of bound check due to the margin.
      *
-     * @param $_x int y coordinate of the specific cell
-     * @param $_y int y coordinate of the specific cell
+     * @param int $_x y coordinate of the specific cell
+     * @param int $_y y coordinate of the specific cell
      * @return int amount of living cells and -1 if given cell is out of bounds or on the margin.
      */
-    public function countLivingNeighbours($_x, $_y)
+    private function countLivingNeighbours($_x, $_y)
     {
         // out of bounds and margin check
         if ($_x < 1 || $_y < 1 || $_x > $this->width - 1 || $_y > $this->height - 1)
@@ -116,5 +128,32 @@ class Board
         }
 
         return $livingNeighbourCount;
+    }
+
+    /**
+     * Compares the current board with the history.
+     *
+     * @param Board $_board board to check.
+     * @return bool true if one of the previous boards is equal to to current board, false otherwise.
+     */
+    public function compare(Board $_board)
+    {
+        $equal = true;
+
+        for ($y = 0; $y < $_board->height(); $y++)
+        {
+            for ($x = 0; $x < $_board->width(); $x++)
+            {
+                if ($this->grid[$x][$y] != $_board->grid[$x][$y])
+                {
+                    $equal = false;
+                }
+            }
+        }
+
+        if ($equal)
+            return true;
+
+        return false;
     }
 }

@@ -2,26 +2,20 @@
 
 namespace GOL\Boards;
 
-use GOL\Rule;
-
 /**
  * Represents a Game of Life world filled randomly with values of 1 or 0.
  *
- * Use grid() to retrieve the current grid and setGrid() to apply all changes.
- *
- * The size of the actual working area is the size -2 due to a margin to remove
- * out of bounds check in getNeighbours() if the given cell would be on the border.
+ * Use print() to print the board and nextGeneration() to calculate the next generation.
  */
 class BoardRandom extends Board
 {
     /**
-     * @param $_width int Width of the Board with margin.
-     * @param $_height int Height af the Board with margin.
-     * @param Rule $_rule rule used to generate the next generation.
+     * @param int $_width Width of the Board with margin.
+     * @param int $_height Height af the Board with margin.
      */
-    function __construct($_width, $_height, Rule $_rule)
+    function __construct($_width, $_height)
     {
-        parent::__construct($_width, $_height, $_rule);
+        parent::__construct($_width, $_height);
 
         // fill the board with random zeros or ones
         for ($y = 1; $y < $_height - 1; $y++)
