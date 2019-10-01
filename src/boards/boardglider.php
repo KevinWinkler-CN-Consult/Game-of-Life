@@ -10,27 +10,23 @@ namespace GOL\Boards;
 class BoardGlider extends Board
 {
     /**
-     * @param int $_width Width of the Board with margin.
-     * @param int $_height Height af the Board with margin.
+     * @param int $_width Width of the Board.
+     * @param int $_height Height af the Board.
      */
     function __construct($_width, $_height)
     {
         parent::__construct($_width, $_height);
 
         // fill the board with a glider if the board is big enough
-        if ($_width >= 5 && $_height >= 5)
+        if ($_width >= 3 && $_height >= 3)
         {
-            $this->grid[1][1] = 0;
-            $this->grid[2][1] = 1;
-            $this->grid[3][1] = 0;
+            $this->setCell(1, 0, 1);
 
-            $this->grid[1][2] = 0;
-            $this->grid[2][2] = 0;
-            $this->grid[3][2] = 1;
+            $this->setCell(2, 1, 1);
 
-            $this->grid[1][3] = 1;
-            $this->grid[2][3] = 1;
-            $this->grid[3][3] = 1;
+            $this->setCell(0, 2, 1);
+            $this->setCell(1, 2, 1);
+            $this->setCell(2, 2, 1);
         }
     }
 }

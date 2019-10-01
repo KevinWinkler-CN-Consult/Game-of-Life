@@ -71,7 +71,7 @@ else if ($getOpt->getOption("startGlider"))
 }
 else if ($getOpt->getOption("startAcorn"))
 {
-    $field = new BoardGlider($width, $height);
+    $field = new BoardAcorn($width, $height);
 }
 else
 {

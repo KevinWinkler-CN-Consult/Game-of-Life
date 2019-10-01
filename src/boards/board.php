@@ -14,8 +14,8 @@ class Board
     protected $height;
 
     /**
-     * @param int $_width Width of the Board with margin.
-     * @param int $_height Height af the Board with margin.
+     * @param int $_width Width of the Board.
+     * @param int $_height Height af the Board.
      */
     public function __construct($_width, $_height)
     {
@@ -23,9 +23,9 @@ class Board
         $this->height = $_height;
 
         // initialize the board
-        for ($y = 0; $y < $_height; $y++)
+        for ($y = 0; $y < $_height + 2; $y++)
         {
-            for ($x = 0; $x < $_width; $x++)
+            for ($x = 0; $x < $_width + 2; $x++)
             {
                 $this->grid[$x][$y] = 0;
             }
@@ -37,9 +37,9 @@ class Board
      */
     public function printBoard()
     {
-        for ($y = 0; $y < $this->height; $y++)
+        for ($y = 0; $y < $this->height + 2; $y++)
         {
-            for ($x = 0; $x < $this->width; $x++)
+            for ($x = 0; $x < $this->width + 2; $x++)
                 echo $this->grid[$x][$y] ? "O" : "-";
             echo "\n";
         }
@@ -52,8 +52,8 @@ class Board
     {
         $buffer = $this->grid;
 
-        for ($y = 1; $y < $this->height - 1; $y++)
-            for ($x = 1; $x < $this->width - 1; $x++)
+        for ($y = 1; $y < $this->height + 1; $y++)
+            for ($x = 1; $x < $this->width + 1; $x++)
                 $buffer[$x][$y] = $this->applyRule($this->countLivingNeighbours($x, $y), $this->grid[$x][$y]);
 
         $this->grid = $buffer;
@@ -66,7 +66,7 @@ class Board
      */
     private function applyRule($_numNeighbours, $_isAlive)
     {
-        $survival = [2,3];
+        $survival = [2, 3];
         $birth = [3];
 
         if ($_isAlive)
@@ -86,7 +86,7 @@ class Board
     }
 
     /**
-     * Returns the width of the board including the margin.
+     * Returns the width of the board.
      * @return int Width of the board.
      */
     public function width()
@@ -95,7 +95,7 @@ class Board
     }
 
     /**
-     * Returns the height of the board including the margin.
+     * Returns the height of the board.
      * @return int height of the board.
      */
     public function height()
@@ -110,12 +110,12 @@ class Board
      *
      * @param int $_x y coordinate of the specific cell
      * @param int $_y y coordinate of the specific cell
-     * @return int amount of living cells and -1 if given cell is out of bounds or on the margin.
+     * @return int amount of living cells and -1 if given cell is out of bounds.
      */
     private function countLivingNeighbours($_x, $_y)
     {
         // out of bounds and margin check
-        if ($_x < 1 || $_y < 1 || $_x > $this->width - 1 || $_y > $this->height - 1)
+        if ($_x < 1 || $_y < 1 || $_x > $this->width || $_y > $this->height)
             return -1;
 
         $relativeNeighbourIndices = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
@@ -140,9 +140,9 @@ class Board
     {
         $equal = true;
 
-        for ($y = 0; $y < $_board->height(); $y++)
+        for ($y = 1; $y < $_board->height() + 1; $y++)
         {
-            for ($x = 0; $x < $_board->width(); $x++)
+            for ($x = 1; $x < $_board->width() + 1; $x++)
             {
                 if ($this->grid[$x][$y] != $_board->grid[$x][$y])
                 {
@@ -155,5 +155,12 @@ class Board
             return true;
 
         return false;
+    }
+
+    public function setCell($_x, $_y, $_value)
+    {
+        if ($_x < 0 || $_y < 0 || $_x >= $this->width || $_y >= $this->height)
+            return;
+        $this->grid[$_x + 1][$_y + 1] = $_value;
     }
 }
