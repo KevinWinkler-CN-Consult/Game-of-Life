@@ -108,8 +108,8 @@ class Board
      *
      * No out of bound check due to the margin.
      *
-     * @param int $_x y coordinate of the specific cell
-     * @param int $_y y coordinate of the specific cell
+     * @param int $_x y coordinate of the specific cell.
+     * @param int $_y y coordinate of the specific cell.
      * @return int amount of living cells and -1 if given cell is out of bounds.
      */
     private function countLivingNeighbours($_x, $_y)
@@ -157,6 +157,12 @@ class Board
         return false;
     }
 
+    /**
+     * Changes the value of a cell.
+     * @param int $_x X position of the cell.
+     * @param int $_y Y position of the cell.
+     * @param int $_value new value of the cell.
+     */
     public function setCell($_x, $_y, $_value)
     {
         if ($_x < 0 || $_y < 0 || $_x >= $this->width || $_y >= $this->height)
