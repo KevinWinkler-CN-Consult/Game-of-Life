@@ -10,19 +10,19 @@ namespace GOL\Boards;
 class BoardRandom extends Board
 {
     /**
-     * @param int $_width Width of the Board with margin.
-     * @param int $_height Height af the Board with margin.
+     * @param int $_width Width of the Board.
+     * @param int $_height Height af the Board.
      */
     function __construct($_width, $_height)
     {
         parent::__construct($_width, $_height);
 
         // fill the board with random zeros or ones
-        for ($y = 1; $y < $_height - 1; $y++)
+        for ($y = 0; $y < $_height; $y++)
         {
-            for ($x = 1; $x < $_width - 1; $x++)
+            for ($x = 0; $x < $_width; $x++)
             {
-                $this->grid[$x][$y] = rand(0, 1);
+                $this->setCell($x, $y, rand(0, 1));
             }
         }
     }

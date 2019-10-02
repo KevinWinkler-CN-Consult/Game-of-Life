@@ -10,28 +10,29 @@ namespace GOL\Boards;
 class BoardAcorn extends Board
 {
     /**
-     * @param int $_width Width of the Board with margin.
-     * @param int $_height Height af the Board with margin.
+     * @param int $_width Width of the Board.
+     * @param int $_height Height af the Board.
      */
     function __construct($_width, $_height)
     {
         parent::__construct($_width, $_height);
 
         // fill the board with a acorn in the center if the board is big enough
-        if ($_width > 9 && $_height > 5)
+        if ($_width >= 7 && $_height >= 3)
         {
             $offsetX = floor($_width / 2 - 7 / 2);
             $offsetY = floor($_height / 2 - 3 / 2);
 
-            $this->grid[1 + $offsetX][0 + $offsetY] = 1;
+            $this->setCell(0 + $offsetX, 0 + $offsetY, 1);
+            $this->setCell(1 + $offsetX, 0 + $offsetY, 1);
 
-            $this->grid[3 + $offsetX][1 + $offsetY] = 1;
+            $this->setCell(4 + $offsetX, 0 + $offsetY, 1);
+            $this->setCell(5 + $offsetX, 0 + $offsetY, 1);
+            $this->setCell(6 + $offsetX, 0 + $offsetY, 1);
 
-            $this->grid[0 + $offsetX][2 + $offsetY] = 1;
-            $this->grid[1 + $offsetX][2 + $offsetY] = 1;
-            $this->grid[4 + $offsetX][2 + $offsetY] = 1;
-            $this->grid[5 + $offsetX][2 + $offsetY] = 1;
-            $this->grid[6 + $offsetX][2 + $offsetY] = 1;
+            $this->setCell(3 + $offsetX, 1 + $offsetY, 1);
+
+            $this->setCell(1 + $offsetX, 2 + $offsetY, 1);
         }
     }
 }
