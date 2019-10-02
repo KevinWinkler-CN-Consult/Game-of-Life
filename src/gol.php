@@ -1,21 +1,21 @@
 <?php
 
 use GOL\Boards\Board;
-use GOL\Boards\BoardAcorn;
-use GOL\Boards\BoardGlider;
-use GOL\Boards\BoardRandom;
 use GOL\Boards\history;
+use GOL\Input\Input;
 use Ulrichsg\Getopt;
 
 require_once "include.php";
 require_once "ulrichsg/getopt.php";
 
 $maxIteration = 21;
-$version = "1.1";
+$version = "1.2";
 $width = 10;
 $height = 10;
 
 $field = null;
+/** @var Input */
+$inputs = [];
 
 $getOpt = new Getopt(
     [
@@ -24,11 +24,26 @@ $getOpt = new Getopt(
 
         [null, 'width', Getopt::REQUIRED_ARGUMENT, "Width of the board"],
         [null, 'height', Getopt::REQUIRED_ARGUMENT, "Height of the board"],
-        ['m', 'maxIteration', Getopt::REQUIRED_ARGUMENT, "Maximum number of iterations"],
-        [null, 'startRandom', Getopt::NO_ARGUMENT, "Start with random values"],
-        [null, 'startGlider', Getopt::NO_ARGUMENT, "Start with a glider in the upper left corner"],
-        [null, 'startAcorn', Getopt::NO_ARGUMENT, "Start with an acorn in the center"]
+        ['m', 'maxIterations', Getopt::REQUIRED_ARGUMENT, "Maximum number of iterations"],
+
+        [null, 'input', Getopt::REQUIRED_ARGUMENT, "Specifies the input"],
+        [null, 'inputList', Getopt::NO_ARGUMENT, "Prints a list of all available inputs"]
     ]);
+
+foreach ($files = glob("input/*") as $file)
+{
+    $basename = basename($file, ".php");
+    $classname = "\\GOL\\Input\\" . $basename;
+
+    if ($basename == "input")
+        continue;
+
+    if (class_exists($classname))
+    {
+        $inputs[$basename] = new $classname;
+        end($inputs)->register($getOpt);
+    }
+}
 
 $getOpt->parse();
 
@@ -43,6 +58,16 @@ if ($getOpt->getOption('v'))
         "Version $version \n";
     die;
 }
+if ($getOpt->getOption("inputList"))
+{
+    echo "Available inputs\n";
+    foreach ($inputs as $type => $input)
+    {
+        echo $type . " " . $input->description() . "\n";
+    }
+    die;
+}
+
 
 if ($getOpt->getOption('width'))
 {
@@ -61,22 +86,35 @@ if ($getOpt->getOption('m'))
     $maxIteration = intval($getOpt->getOption('m'));
 }
 
-if ($getOpt->getOption("startRandom"))
+
+if ($getOpt->getOption("input"))
 {
-    $field = new BoardRandom($width, $height);
+    $arg = $getOpt->getOption("input");
+
+    foreach ($inputs as $type => $input)
+    {
+        if ($type == $arg)
+        {
+            $field = new Board($width, $height);
+            $input->prepareBoard($field, $getOpt);
+            break;
+        }
+    }
 }
-else if ($getOpt->getOption("startGlider"))
+
+if ($field == null)
 {
-    $field = new BoardGlider($width, $height);
+    $field = new Board($width, $height);
+
+    $field->setCell(1, 0, 1);
+
+    $field->setCell(2, 1, 1);
+
+    $field->setCell(0, 2, 1);
+    $field->setCell(1, 2, 1);
+    $field->setCell(2, 2, 1);
 }
-else if ($getOpt->getOption("startAcorn"))
-{
-    $field = new BoardAcorn($width, $height);
-}
-else
-{
-    $field = new BoardAcorn($width, $height);
-}
+
 
 $history = new history($field);
 
