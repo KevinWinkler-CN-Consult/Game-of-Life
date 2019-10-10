@@ -6,10 +6,9 @@ use GOL\Boards\Board;
 use Ulrichsg\Getopt;
 
 /**
- * Allows user to set files alive manually by using the x- and y-coords of the cells.
- *
- * Use prepareBoard() to prepare a Board and register()
- * to register optional arguments.
+ * User input
+ * Allows user to set cells alive manually by using the x- and y-coords of the cells.
+ * Use prepareBoard() to prepare a Board and register() to register optional arguments.
  */
 class User extends Input
 {
@@ -28,7 +27,8 @@ class User extends Input
         {
             $_board->printBoard();
             $readline = readline("Cell >> ");
-            if ($readline == "finish") break;
+            if ($readline == "finish")
+                break;
             $coordinates = explode(",", $readline);
 
             if (count($coordinates) == 3)
@@ -48,8 +48,7 @@ class User extends Input
      * Register all optional parameters of an Input, if any.
      * @param Getopt $_getopt Option manager to add the options
      */
-    public
-    function register(Getopt $_getopt): void
+    public function register(Getopt $_getopt): void
     {
     }
 
@@ -57,8 +56,7 @@ class User extends Input
      * Returns the description of the Input.
      * @return string description.
      */
-    public
-    function description(): string
+    public function description(): string
     {
         return "Allows to set the state of specific cells.";
     }
