@@ -46,6 +46,25 @@ class Board
     }
 
     /**
+     * Returns a copy of the grid data
+     * @return array Grid of the Board.
+     */
+    public function getGrid(): array
+    {
+        $result = array();
+
+        for ($y = 1; $y < $this->height + 1; $y++)
+        {
+            for ($x = 1; $x < $this->width + 1; $x++)
+            {
+                $result[$x-1][$y-1] = $this->grid[$x][$y];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Runs the Game of Life algorithm.
      */
     public function nextGeneration()
