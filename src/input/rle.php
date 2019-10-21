@@ -6,7 +6,31 @@ use GOL\Boards\Board;
 use Ulrichsg\Getopt;
 
 /**
- * Fills the board with a specific patter saved in the RLE format.
+ * Fills the board with a specific pattern saved in the Run Length Encoded(.rle) format.
+ *
+ * The RLE format consists of optional comment lines, a header line and the data.
+ *
+ * Any lines before the header line starting with # are considered comments.
+ *
+ * The header line has the form: x = m, y = n
+ * where m and n are the with and the height of the pattern.
+ *
+ * The line after the header contains the pattern data.
+ * The data is an encoded sequence of items in the form <run_count><tag>
+ * where <run_count> is the number of occurrences of <tag> and <tag> is one of the following three characters:
+ * b = dead cell
+ * o = alive cell
+ * $ = end of line
+ * <run_count> can be omitted if it is equal to 1.
+ *
+ * An ! marks the end of the pattern.
+ *
+ * Carriage returns or line feeds should not be placed between <run_count> and <tag>.
+ *
+ * Example of a glider:
+ * #C This is a glider.
+ * x = 3, y = 3
+ * bo$2bo$3o!
  *
  * Use prepareBoard() to prepare a Board and register()
  * to register optional arguments.

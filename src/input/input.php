@@ -6,10 +6,10 @@ use GOL\Boards\Board;
 use Ulrichsg\Getopt;
 
 /**
- * Interface for pluggable inputs.
+ * Baseclass for pluggable inputs.
  *
- * Use prepareBoard() to prepare a Board and register()
- * to register optional arguments.
+ * Implement prepareBoard() to fill a Board in a specific way
+ * and register() to register optional arguments.
  */
 abstract class Input
 {

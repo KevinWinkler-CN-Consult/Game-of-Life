@@ -6,7 +6,20 @@ use GOL\Boards\Board;
 use Ulrichsg\Getopt;
 
 /**
- * Fills the board with a specific patter saved in the plaintext format.
+ * Fills the board with a specific pattern saved in the plaintext(.cells) format.
+ *
+ * Plaintext stores the state of a cell as an Ascii character
+ * . = dead
+ * O = alive
+ * Lines that start with ! are treated as comment.
+ * Any other line represents a row of the pattern.
+ *
+ * Example of a glider:
+ * !Name: Glider
+ * !
+ * .O.
+ * ..O
+ * OOO
  *
  * Use prepareBoard() to prepare a Board and register()
  * to register optional arguments.
