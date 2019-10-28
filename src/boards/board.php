@@ -40,28 +40,11 @@ class Board
         for ($y = 0; $y < $this->height + 2; $y++)
         {
             for ($x = 0; $x < $this->width + 2; $x++)
+            {
                 echo $this->grid[$x][$y] ? "O" : "-";
+            }
             echo "\n";
         }
-    }
-
-    /**
-     * Returns a copy of the grid data
-     * @return array Grid of the Board.
-     */
-    public function getGrid(): array
-    {
-        $result = array();
-
-        for ($y = 1; $y < $this->height + 1; $y++)
-        {
-            for ($x = 1; $x < $this->width + 1; $x++)
-            {
-                $result[$x-1][$y-1] = $this->grid[$x][$y];
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -72,8 +55,12 @@ class Board
         $buffer = $this->grid;
 
         for ($y = 1; $y < $this->height + 1; $y++)
+        {
             for ($x = 1; $x < $this->width + 1; $x++)
+            {
                 $buffer[$x][$y] = $this->applyRule($this->countLivingNeighbours($x, $y), $this->grid[$x][$y]);
+            }
+        }
 
         $this->grid = $buffer;
     }
@@ -91,35 +78,21 @@ class Board
         if ($_isAlive)
         {
             foreach ($survival as $s)
+            {
                 if ($_numNeighbours == $s)
                     return 1;
+            }
         }
         else
         {
             foreach ($birth as $b)
+            {
                 if ($_numNeighbours == $b)
                     return 1;
+            }
         }
 
         return 0;
-    }
-
-    /**
-     * Returns the width of the board.
-     * @return int Width of the board.
-     */
-    public function width()
-    {
-        return $this->width;
-    }
-
-    /**
-     * Returns the height of the board.
-     * @return int height of the board.
-     */
-    public function height()
-    {
-        return $this->height;
     }
 
     /**
@@ -164,16 +137,11 @@ class Board
             for ($x = 1; $x < $_board->width() + 1; $x++)
             {
                 if ($this->grid[$x][$y] != $_board->grid[$x][$y])
-                {
                     $equal = false;
-                }
             }
         }
 
-        if ($equal)
-            return true;
-
-        return false;
+        return $equal;
     }
 
     /**
@@ -186,6 +154,44 @@ class Board
     {
         if ($_x < 0 || $_y < 0 || $_x >= $this->width || $_y >= $this->height)
             return;
+
         $this->grid[$_x + 1][$_y + 1] = $_value;
+    }
+
+    /**
+     * Returns a copy of the grid data
+     * @return array Grid of the Board.
+     */
+    public function getGrid(): array
+    {
+        $result = array();
+
+        for ($y = 1; $y < $this->height + 1; $y++)
+        {
+            for ($x = 1; $x < $this->width + 1; $x++)
+            {
+                $result[$x - 1][$y - 1] = $this->grid[$x][$y];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns the width of the board.
+     * @return int Width of the board.
+     */
+    public function width()
+    {
+        return $this->width;
+    }
+
+    /**
+     * Returns the height of the board.
+     * @return int height of the board.
+     */
+    public function height()
+    {
+        return $this->height;
     }
 }

@@ -30,7 +30,7 @@ class PNG extends Output
      */
     public function flush(): void
     {
-        if(!is_dir("out/"))
+        if (!is_dir("out/"))
             mkdir("out/", 0755);
 
         foreach ($this->buffer as $index => $board)
@@ -51,7 +51,7 @@ class PNG extends Output
                 }
             }
 
-            imagepng($image, "out/" . sprintf("img-%03d",$index) . ".png");
+            imagepng($image, "out/" . sprintf("img-%03d", $index) . ".png");
         }
         $this->buffer = [];
     }

@@ -34,7 +34,7 @@ class Video extends Output
      */
     public function flush(): void
     {
-        if(!is_dir("out/"))
+        if (!is_dir("out/"))
             mkdir("out/", 0755);
 
         foreach ($this->buffer as $index => $board)
@@ -61,11 +61,11 @@ class Video extends Output
                 }
             }
 
-            imagepng($image, "out/" . sprintf("img-%03d",$index) . ".png");
+            imagepng($image, "out/" . sprintf("img-%03d", $index) . ".png");
         }
 
         exec("ffmpeg -framerate " . $this->fps . " -i out/img-%03d.png out/video.avi");
-        exec( "rm out/img*" );
+        exec("rm out/img*");
 
         $this->buffer = [];
     }

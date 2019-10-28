@@ -23,19 +23,25 @@ abstract class Output
     /**
      * Outputs the data.
      */
-    public function flush(): void { }
+    public function flush(): void
+    {
+    }
 
     /**
      * Checks for optional parameters.
      * @param Getopt $_getopt Option manager to check for optional parameters.
      */
-    public function checkParamerters(Getopt $_getopt): void { }
+    public function checkParamerters(Getopt $_getopt): void
+    {
+    }
 
     /**
      * Register all optional parameters of an Output, if any.
      * @param Getopt $_getopt Option manager to add the options
      */
-    public function register(Getopt $_getopt): void { }
+    public function register(Getopt $_getopt): void
+    {
+    }
 
     /**
      * Returns the description of the Output.

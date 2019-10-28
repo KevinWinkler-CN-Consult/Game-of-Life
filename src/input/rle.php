@@ -44,8 +44,8 @@ class RLE extends Input
      */
     public function prepareBoard(Board &$_board, Getopt $_getopt): void
     {
-        $file = $_getopt->getOption("rleFile");
-        if ($file == null)
+        $filePath = $_getopt->getOption("rleFile");
+        if ($filePath == null)
         {
             echo "Option --rleFile must be set!\n";
             return;
@@ -55,10 +55,10 @@ class RLE extends Input
         $posX = 0;
         $posY = 0;
 
-        $fh = fopen($file, 'r');
+        $fileHandle = fopen($filePath, 'r');
 
         //read header
-        while ($line = fgets($fh))
+        while ($line = fgets($fileHandle))
         {
             if (substr($line, 0, 1) == '#')
                 continue;
@@ -86,7 +86,7 @@ class RLE extends Input
         }
 
         //read data
-        while ($line = fgets($fh))
+        while ($line = fgets($fileHandle))
         {
             $numberStart = -1;
 
@@ -127,7 +127,7 @@ class RLE extends Input
 
             }
         }
-        fclose($fh);
+        fclose($fileHandle);
     }
 
     /**

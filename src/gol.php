@@ -13,12 +13,17 @@ $maxIteration = 21;
 $version = "1.2";
 $width = 10;
 $height = 10;
+$historyLength = 2;
 
+/**
+ * @var Board $field
+ * @var Input $inputs
+ * @var Output $output
+ * @var Output $outputs
+ */
 $field = null;
-$output = null;
-/** @var Input */
 $inputs = [];
-/** @var Output $outputs */
+$output = null;
 $outputs = [];
 
 $getOpt = new Getopt(
@@ -92,9 +97,9 @@ if ($getOpt->getOption("inputList"))
 if ($getOpt->getOption("outputList"))
 {
     echo "Available outputs\n";
-    foreach ($outputs as $type => $output)
+    foreach ($outputs as $type => $out)
     {
-        echo $type . " " . $output->description() . "\n";
+        echo $type . " " . $out->description() . "\n";
     }
     die;
 }
@@ -160,7 +165,7 @@ if ($field == null)
     $field->setCell(2, 2, 1);
 }
 
-if ( $output == null )
+if ($output == null)
 {
     echo "An output has to be defined!\n";
     die;
@@ -173,7 +178,7 @@ for ($i = 0; $i < $maxIteration; $i++)
     $output->write($field);
     $field->nextGeneration();
 
-    if ($history->stackSize() > 2)
+    if ($history->stackSize() > $historyLength)
         $history->pop();
 
     if ($history->compare($field))
