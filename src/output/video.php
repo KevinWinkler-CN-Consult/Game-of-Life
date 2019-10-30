@@ -42,22 +42,18 @@ class Video extends Output
             $with = count($board);
             $height = count($board[0]);
 
-            $image = imagecreate($with * $this->cellSize, $height * $this->cellSize);
+            $cellSize = $this->cellSize;
+            $image = imagecreate($with * $cellSize, $height * $cellSize);
             imagecolorallocate($image, $this->backgroundColor[0], $this->backgroundColor[1], $this->backgroundColor[2]);
             $cellColor = imagecolorallocate($image, $this->cellColor[0], $this->cellColor[1], $this->cellColor[2]);
 
             for ($y = 0; $y < $height; $y++)
             {
-                for ($sy = 0; $sy < $this->cellSize; $sy++)
+                for ($x = 0; $x < $with; $x++)
                 {
-                    for ($x = 0; $x < $with; $x++)
-                    {
-                        if ($board[$x][$y] == 1)
-                            for ($sx = 0; $sx < $this->cellSize; $sx++)
-                            {
-                                imagesetpixel($image, $x * $this->cellSize + $sx, $y * $this->cellSize + $sy, $cellColor);
-                            }
-                    }
+                    if ($board[$x][$y] == 1)
+                        imagefilledrectangle($image, $x * $cellSize, $y * $cellSize,
+                                             $x * $cellSize + $cellSize, $y * $cellSize + $cellSize, $cellColor );
                 }
             }
 
