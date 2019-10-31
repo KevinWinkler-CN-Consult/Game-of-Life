@@ -2,6 +2,8 @@
 
 namespace GOL\Output;
 
+require_once "seasonal.php";
+
 use GOL\Boards\Board;
 use Ulrichsg\Getopt;
 
@@ -14,6 +16,7 @@ use Ulrichsg\Getopt;
 class PNG extends Output
 {
     private $buffer = [];
+    private $cellSize = 1;
     private $backgroundColor = [];
     private $cellColor = [];
 
@@ -39,8 +42,9 @@ class PNG extends Output
         {
             $with = count($board);
             $height = count($board[0]);
+            $cellSize = $this->cellSize;
 
-            $image = imagecreate($with, $height);
+            $image = imagecreate($with * $cellSize, $height * $cellSize);
             imagecolorallocate($image, $this->backgroundColor[0], $this->backgroundColor[1], $this->backgroundColor[2]);
             $cellColor = imagecolorallocate($image, $this->cellColor[0], $this->cellColor[1], $this->cellColor[2]);
 
@@ -49,7 +53,8 @@ class PNG extends Output
                 for ($x = 0; $x < $with; $x++)
                 {
                     if ($board[$x][$y] == 1)
-                        imagesetpixel($image, $x, $y, $cellColor);
+                        imagefilledrectangle($image, $x * $cellSize, $y * $cellSize,
+                                             $x * $cellSize + $cellSize - 1, $y * $cellSize + $cellSize - 1, $cellColor);
                 }
             }
 
@@ -64,7 +69,12 @@ class PNG extends Output
      */
     public function checkParamerters(Getopt $_getopt): void
     {
+        $this->cellSize = intval($_getopt->getOption("pngCellSize"));
+        if ($this->cellSize <= 0)
+            $this->cellSize = 1;
+
         $seasonalColor = getHolidayColor();
+
         if (count($seasonalColor) == 6)
         {
             $this->backgroundColor[0] = $seasonalColor[0];
@@ -74,15 +84,48 @@ class PNG extends Output
             $this->cellColor[1] = $seasonalColor[4];
             $this->cellColor[2] = $seasonalColor[5];
         }
-        else
+
+        foreach (explode(",", $_getopt->getOption("pngBackgroundColor")) as $item => $value)
+        {
+            if ($value == "")
+                break;
+
+            $this->backgroundColor[$item] = $value;
+        }
+        foreach (explode(",", $_getopt->getOption("pngCellColor")) as $item => $value)
+        {
+            if ($value == "")
+                break;
+
+            $this->cellColor[$item] = $value;
+        }
+
+        if (empty($this->backgroundColor))
         {
             $this->backgroundColor[0] = 0;
             $this->backgroundColor[1] = 0;
             $this->backgroundColor[2] = 0;
+        }
+        if (empty($this->cellColor))
+        {
             $this->cellColor[0] = 255;
             $this->cellColor[1] = 255;
             $this->cellColor[2] = 255;
         }
+    }
+
+    /**
+     * Register all optional parameters the Output.
+     * @param Getopt $_getopt Option manager to add the options
+     */
+    public function register(Getopt $_getopt): void
+    {
+        $_getopt->addOptions(
+            [
+                [null, "pngCellColor", Getopt::REQUIRED_ARGUMENT, "Sets the color of living cells. 'r,g,b' 0-255."],
+                [null, "pngBackgroundColor", Getopt::REQUIRED_ARGUMENT, "Sets the background color. 'r,g,b' 0-255."],
+                [null, "pngCellSize", Getopt::REQUIRED_ARGUMENT, "Sets the size of the cells in pixel."]
+            ]);
     }
 
     /**
