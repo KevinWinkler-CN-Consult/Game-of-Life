@@ -2,6 +2,8 @@
 
 namespace GOL\Output;
 
+require_once "seasonal.php";
+
 use GOL\Boards\Board;
 use Ulrichsg\Getopt;
 
@@ -41,8 +43,8 @@ class Video extends Output
         {
             $with = count($board);
             $height = count($board[0]);
-
             $cellSize = $this->cellSize;
+
             $image = imagecreate($with * $cellSize, $height * $cellSize);
             imagecolorallocate($image, $this->backgroundColor[0], $this->backgroundColor[1], $this->backgroundColor[2]);
             $cellColor = imagecolorallocate($image, $this->cellColor[0], $this->cellColor[1], $this->cellColor[2]);
@@ -53,7 +55,7 @@ class Video extends Output
                 {
                     if ($board[$x][$y] == 1)
                         imagefilledrectangle($image, $x * $cellSize, $y * $cellSize,
-                                             $x * $cellSize + $cellSize, $y * $cellSize + $cellSize, $cellColor );
+                                             $x * $cellSize + $cellSize, $y * $cellSize + $cellSize, $cellColor);
                 }
             }
 
@@ -79,6 +81,18 @@ class Video extends Output
         $this->cellSize = $_getopt->getOption("videoCellSize");
         if ($this->cellSize <= 0)
             $this->cellSize = 1;
+
+        $seasonalColor = getHolidayColor();
+
+        if (count($seasonalColor) == 6)
+        {
+            $this->backgroundColor[0] = $seasonalColor[0];
+            $this->backgroundColor[1] = $seasonalColor[1];
+            $this->backgroundColor[2] = $seasonalColor[2];
+            $this->cellColor[0] = $seasonalColor[3];
+            $this->cellColor[1] = $seasonalColor[4];
+            $this->cellColor[2] = $seasonalColor[5];
+        }
 
         foreach (explode(",", $_getopt->getOption("videoCellColor")) as $item => $value)
         {
