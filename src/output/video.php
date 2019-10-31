@@ -55,7 +55,7 @@ class Video extends Output
                 {
                     if ($board[$x][$y] == 1)
                         imagefilledrectangle($image, $x * $cellSize, $y * $cellSize,
-                                             $x * $cellSize + $cellSize, $y * $cellSize + $cellSize, $cellColor);
+                                             $x * $cellSize + $cellSize - 1, $y * $cellSize + $cellSize - 1, $cellColor);
                 }
             }
 
