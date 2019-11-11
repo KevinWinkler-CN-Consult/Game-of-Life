@@ -32,12 +32,12 @@ class Console extends Output
     {
         foreach ($this->buffer as $board)
         {
-            $with = count($board);
+            $width = count($board);
             $height = count($board[0]);
 
             for ($y = 0; $y < $height; $y++)
             {
-                for ($x = 0; $x < $with; $x++)
+                for ($x = 0; $x < $width; $x++)
                 {
                     echo $board[$x][$y] ? "O" : "-";
                 }

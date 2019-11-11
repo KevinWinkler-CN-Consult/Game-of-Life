@@ -17,8 +17,6 @@ require_once "animgif/AnimGif.php";
 class Gif extends Output
 {
     private $buffer = [];
-    private $width;
-    private $height;
 
     /**
      * Writes the current board to the Output.
