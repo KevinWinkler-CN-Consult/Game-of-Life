@@ -31,7 +31,7 @@ class PNG extends Output
     }
 
     /**
-     * Writes the data to the console.
+     * Writes the data to disk.
      */
     public function flush(): void
     {
@@ -40,17 +40,17 @@ class PNG extends Output
 
         foreach ($this->buffer as $index => $board)
         {
-            $with = count($board);
+            $width = count($board);
             $height = count($board[0]);
             $cellSize = $this->cellSize;
 
-            $image = imagecreate($with * $cellSize, $height * $cellSize);
+            $image = imagecreate($width * $cellSize, $height * $cellSize);
             imagecolorallocate($image, $this->backgroundColor[0], $this->backgroundColor[1], $this->backgroundColor[2]);
             $cellColor = imagecolorallocate($image, $this->cellColor[0], $this->cellColor[1], $this->cellColor[2]);
 
             for ($y = 0; $y < $height; $y++)
             {
-                for ($x = 0; $x < $with; $x++)
+                for ($x = 0; $x < $width; $x++)
                 {
                     if ($board[$x][$y] == 1)
                         imagefilledrectangle($image, $x * $cellSize, $y * $cellSize,
