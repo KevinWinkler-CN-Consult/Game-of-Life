@@ -16,7 +16,7 @@ require_once "animgif/AnimGif.php";
  */
 class Gif extends Output
 {
-    private $buffer = [];
+    private $index = 0;
     private $delay = 1;
     private $cellColor = [];
     private $backgroundColor = [];
@@ -29,7 +29,27 @@ class Gif extends Output
      */
     public function write(Board $_board): void
     {
-        $this->buffer[] = $_board->getGrid();
+        $board = $_board->getGrid();
+
+        $width = count($board);
+        $height = count($board[0]);
+        $cellSize = $this->cellSize;
+
+        $image = imagecreate($width * $cellSize, $height * $cellSize);
+        imagecolorallocate($image, $this->backgroundColor[0], $this->backgroundColor[1], $this->backgroundColor[2]);
+        $cellColor = imagecolorallocate($image, $this->cellColor[0], $this->cellColor[1], $this->cellColor[2]);
+
+        for ($y = 0; $y < $height; $y++)
+        {
+            for ($x = 0; $x < $width; $x++)
+            {
+                if ($board[$x][$y] == 1)
+                    imagefilledrectangle($image, $x * $cellSize, $y * $cellSize,
+                                         $x * $cellSize + $cellSize - 1, $y * $cellSize + $cellSize - 1, $cellColor);
+            }
+        }
+        imagepng($image, "out/" . sprintf("img-%03d", $this->index) . ".png");
+        $this->index++;
     }
 
     /**
@@ -37,41 +57,12 @@ class Gif extends Output
      */
     public function flush(): void
     {
-        $frames = [];
-
-        if (!is_dir("out/"))
-        {
-            mkdir("out/", 0755);
-        }
-
-        foreach ($this->buffer as $index => $board)
-        {
-            $width = count($board);
-            $height = count($board[0]);
-            $cellSize = $this->cellSize;
-
-            $image = imagecreate($width * $cellSize, $height * $cellSize);
-            imagecolorallocate($image, $this->backgroundColor[0], $this->backgroundColor[1], $this->backgroundColor[2]);
-            $cellColor = imagecolorallocate($image, $this->cellColor[0], $this->cellColor[1], $this->cellColor[2]);
-
-            for ($y = 0; $y < $height; $y++)
-            {
-                for ($x = 0; $x < $width; $x++)
-                {
-                    if ($board[$x][$y] == 1)
-                        imagefilledrectangle($image, $x * $cellSize, $y * $cellSize,
-                                             $x * $cellSize + $cellSize - 1, $y * $cellSize + $cellSize - 1, $cellColor);
-                }
-            }
-            $frames[] = $image;
-        }
-        $this->buffer = [];
-
         $animGif = new AnimGif();
         try
         {
-            $animGif->create($frames, 1);
+            $animGif->create("out/", 1);
             $animGif->save("out/output.gif");
+            exec("rm out/img*");
         }
         catch (\Exception $e)
         {
@@ -83,7 +74,7 @@ class Gif extends Output
      * Checks for optional parameters.
      * @param Getopt $_getopt Option manager to check for optional parameters.
      */
-    public function checkParamerters(Getopt $_getopt): void
+    public function checkParameters(Getopt $_getopt): void
     {
         $this->delay = $_getopt->getOption("gifDelay");
         if ($this->delay <= 0.0)
@@ -131,6 +122,11 @@ class Gif extends Output
             $this->backgroundColor[0] = 0;
             $this->backgroundColor[1] = 0;
             $this->backgroundColor[2] = 0;
+        }
+
+        if (!is_dir("out/"))
+        {
+            mkdir("out/", 0755);
         }
     }
 

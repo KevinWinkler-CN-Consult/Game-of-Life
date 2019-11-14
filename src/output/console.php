@@ -6,15 +6,13 @@ use GOL\Boards\Board;
 use Ulrichsg\Getopt;
 
 /**
- * Prints the board to the console
+ * Prints the board to the console.
  *
  * Use write() to write the Board data to the buffer.
  * and flush() to print the buffer.
  */
 class Console extends Output
 {
-    private $buffer = [];
-
     /**
      * Writes the current board to the Output.
      *
@@ -22,30 +20,19 @@ class Console extends Output
      */
     public function write(Board $_board): void
     {
-        $this->buffer[] = $_board->getGrid();
-    }
+        $board = $_board->getGrid();
+        $width = count($board);
+        $height = count($board[0]);
 
-    /**
-     * Writes the data to the console.
-     */
-    public function flush(): void
-    {
-        foreach ($this->buffer as $board)
+        for ($y = 0; $y < $height; $y++)
         {
-            $width = count($board);
-            $height = count($board[0]);
-
-            for ($y = 0; $y < $height; $y++)
+            for ($x = 0; $x < $width; $x++)
             {
-                for ($x = 0; $x < $width; $x++)
-                {
-                    echo $board[$x][$y] ? "O" : "-";
-                }
-                echo "\n";
+                echo $board[$x][$y] ? "O" : "-";
             }
             echo "\n";
         }
-        $this->buffer = [];
+        echo "\n";
     }
 
     /**

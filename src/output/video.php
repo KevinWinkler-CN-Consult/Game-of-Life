@@ -72,7 +72,7 @@ class Video extends Output
      * Checks for optional parameters.
      * @param Getopt $_getopt Option manager to check for optional parameters.
      */
-    public function checkParamerters(Getopt $_getopt): void
+    public function checkParameters(Getopt $_getopt): void
     {
         $this->fps = $_getopt->getOption("videoFPS");
         if ($this->fps <= 0.0)

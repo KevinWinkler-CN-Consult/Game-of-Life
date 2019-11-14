@@ -6,10 +6,11 @@
  */
 function getHolidayColor(): array
 {
-    $dateToday = mktime(0,0,0,date("m"),date("d"));
 
-    if( $dateToday - mktime(0,0,0,10,31) == 0 )// halloween
-        return [0,0,0,255,153,0];
+    if (date("m-d") == "10-31")
+    { // halloween
+        return [0, 0, 0, 255, 153, 0];
+    }
 
-    return[];
+    return [];
 }

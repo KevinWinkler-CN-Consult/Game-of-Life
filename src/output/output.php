@@ -31,7 +31,7 @@ abstract class Output
      * Checks for optional parameters.
      * @param Getopt $_getopt Option manager to check for optional parameters.
      */
-    public function checkParamerters(Getopt $_getopt): void
+    public function checkParameters(Getopt $_getopt): void
     {
     }
 
@@ -45,6 +45,7 @@ abstract class Output
 
     /**
      * Returns the description of the Output.
+     * This is used to list all outputs if the argument outputList is set.
      * @return string description.
      */
     public function description(): string

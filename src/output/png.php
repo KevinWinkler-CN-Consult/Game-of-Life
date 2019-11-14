@@ -15,7 +15,7 @@ use Ulrichsg\Getopt;
  */
 class PNG extends Output
 {
-    private $buffer = [];
+    private $index = 0;
     private $cellSize = 1;
     private $backgroundColor = [];
     private $cellColor = [];
@@ -27,47 +27,35 @@ class PNG extends Output
      */
     public function write(Board $_board): void
     {
-        $this->buffer[] = $_board->getGrid();
-    }
+        $board = $_board->getGrid();
 
-    /**
-     * Writes the data to disk.
-     */
-    public function flush(): void
-    {
-        if (!is_dir("out/"))
-            mkdir("out/", 0755);
+        $width = count($board);
+        $height = count($board[0]);
+        $cellSize = $this->cellSize;
 
-        foreach ($this->buffer as $index => $board)
+        $image = imagecreate($width * $cellSize, $height * $cellSize);
+        imagecolorallocate($image, $this->backgroundColor[0], $this->backgroundColor[1], $this->backgroundColor[2]);
+        $cellColor = imagecolorallocate($image, $this->cellColor[0], $this->cellColor[1], $this->cellColor[2]);
+
+        for ($y = 0; $y < $height; $y++)
         {
-            $width = count($board);
-            $height = count($board[0]);
-            $cellSize = $this->cellSize;
-
-            $image = imagecreate($width * $cellSize, $height * $cellSize);
-            imagecolorallocate($image, $this->backgroundColor[0], $this->backgroundColor[1], $this->backgroundColor[2]);
-            $cellColor = imagecolorallocate($image, $this->cellColor[0], $this->cellColor[1], $this->cellColor[2]);
-
-            for ($y = 0; $y < $height; $y++)
+            for ($x = 0; $x < $width; $x++)
             {
-                for ($x = 0; $x < $width; $x++)
-                {
-                    if ($board[$x][$y] == 1)
-                        imagefilledrectangle($image, $x * $cellSize, $y * $cellSize,
-                                             $x * $cellSize + $cellSize - 1, $y * $cellSize + $cellSize - 1, $cellColor);
-                }
+                if ($board[$x][$y] == 1)
+                    imagefilledrectangle($image, $x * $cellSize, $y * $cellSize,
+                                         $x * $cellSize + $cellSize - 1, $y * $cellSize + $cellSize - 1, $cellColor);
             }
-
-            imagepng($image, "out/" . sprintf("img-%03d", $index) . ".png");
         }
-        $this->buffer = [];
+
+        imagepng($image, "out/" . sprintf("img-%03d", $this->index) . ".png");
+        $this->index++;
     }
 
     /**
      * Checks for optional parameters.
      * @param Getopt $_getopt Option manager to check for optional parameters.
      */
-    public function checkParamerters(Getopt $_getopt): void
+    public function checkParameters(Getopt $_getopt): void
     {
         $this->cellSize = intval($_getopt->getOption("pngCellSize"));
         if ($this->cellSize <= 0)
@@ -112,6 +100,9 @@ class PNG extends Output
             $this->cellColor[1] = 255;
             $this->cellColor[2] = 255;
         }
+
+        if (!is_dir("out/"))
+            mkdir("out/", 0755);
     }
 
     /**

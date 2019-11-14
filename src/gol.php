@@ -131,7 +131,7 @@ if ($getOpt->getOption("output"))
         if ($type == $arg)
         {
             $output = $out;
-            $output->checkParamerters($getOpt);
+            $output->checkParameters($getOpt);
             break;
         }
     }
