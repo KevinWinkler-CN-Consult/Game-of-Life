@@ -3,6 +3,7 @@
 namespace GOL\Input;
 
 use GOL\Boards\Board;
+use GOL\Output\Console;
 use Ulrichsg\Getopt;
 
 /**
@@ -23,9 +24,11 @@ class User extends Input
             "Example: \"25,10,1\" will set the cell at x:25 and y:10 to the state \"alive\".\n\n" .
             "(Enter \"finish\" to continue.)\n";
 
+        $output = new Console();
+
         while (true)
         {
-            $_board->printBoard();
+            $output->write($_board);
             $readline = readline("Cell >> ");
             if ($readline == "finish")
                 break;

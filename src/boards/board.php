@@ -33,21 +33,6 @@ class Board
     }
 
     /**
-     * Prints the board to the console.
-     */
-    public function printBoard()
-    {
-        for ($y = 0; $y < $this->height + 2; $y++)
-        {
-            for ($x = 0; $x < $this->width + 2; $x++)
-            {
-                echo $this->grid[$x][$y] ? "O" : "-";
-            }
-            echo "\n";
-        }
-    }
-
-    /**
      * Runs the Game of Life algorithm.
      */
     public function nextGeneration()
