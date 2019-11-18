@@ -3,7 +3,7 @@
 namespace GOL\Input;
 
 use GOL\Boards\Board;
-use Ulrichsg\Getopt;
+use GetOpt\Getopt;
 
 /**
  * Fills the board with a specific pattern saved in the Run Length Encoded(.rle) format.

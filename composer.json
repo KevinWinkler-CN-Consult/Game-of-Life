@@ -1,0 +1,12 @@
+{
+  "autoload":{
+    "psr-4": {
+      "GOL\\": "src/"
+    }
+  },
+
+  "require": {
+    "phpunit/phpunit": "8.4.3",
+    "ulrichsg/getopt-php": "3.2.2"
+  }
+}

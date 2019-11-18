@@ -4,7 +4,7 @@ namespace GOL\Output;
 
 use GifCreator\AnimGif;
 use GOL\Boards\Board;
-use Ulrichsg\Getopt;
+use GetOpt\Getopt;
 
 require_once "animgif/AnimGif.php";
 

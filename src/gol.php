@@ -1,13 +1,12 @@
 <?php
 
+use GetOpt\GetOpt;
 use GOL\Boards\Board;
 use GOL\Boards\history;
 use GOL\Input\Input;
 use GOL\Output\Output;
-use Ulrichsg\Getopt;
 
-require_once "include.php";
-require_once "ulrichsg/getopt.php";
+require_once "../vendor/autoload.php";
 
 $maxIteration = 21;
 $version = "1.2";

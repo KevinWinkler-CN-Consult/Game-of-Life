@@ -4,7 +4,7 @@ namespace GOL\Input;
 
 use GOL\Boards\Board;
 use GOL\Output\Console;
-use Ulrichsg\Getopt;
+use GetOpt\Getopt;
 
 /**
  * User input

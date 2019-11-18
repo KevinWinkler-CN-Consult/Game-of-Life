@@ -3,7 +3,7 @@
 namespace GOL\Input;
 
 use GOL\Boards\Board;
-use Ulrichsg\Getopt;
+use GetOpt\Getopt;
 
 /**
  * Baseclass for pluggable inputs.

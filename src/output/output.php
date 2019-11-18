@@ -3,7 +3,7 @@
 namespace GOL\Output;
 
 use GOL\Boards\Board;
-use Ulrichsg\Getopt;
+use GetOpt\Getopt;
 
 /**
  * Base class for pluggable outputs.

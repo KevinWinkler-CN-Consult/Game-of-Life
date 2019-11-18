@@ -5,7 +5,7 @@ namespace GOL\Output;
 require_once "seasonal.php";
 
 use GOL\Boards\Board;
-use Ulrichsg\Getopt;
+use GetOpt\Getopt;
 
 /**
  * Saves the Board as a video.
