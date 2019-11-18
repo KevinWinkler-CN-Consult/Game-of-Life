@@ -1,0 +1,15 @@
+<phpunit>
+    <filter>
+        <whitelist>
+            <directory>/vagrant/src/</directory>
+            <exclude>
+                <directory>/vagrant/vendor/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <testsuites>
+        <testsuite name="My Test Suite">
+            <directory>/vagrant/test/</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

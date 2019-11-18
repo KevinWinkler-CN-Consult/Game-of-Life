@@ -3,3 +3,4 @@
 resources/
 Vagrantfile
 /vendor/
+/.phpunit.result.cache
