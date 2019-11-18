@@ -33,31 +33,31 @@ class Plaintext extends Input
      */
     public function prepareBoard(Board &$_board, Getopt $_getopt): void
     {
-        $file = $_getopt->getOption("plaintextFile");
-        if ($file == null)
+        $filePath = $_getopt->getOption("plaintextFile");
+        if ($filePath == null)
         {
             echo "Option --plaintextFile must be set!\n";
             return;
         }
         $posY = 0;
 
-        $fh = fopen($file, 'r');
+        $fileHandle = fopen($filePath, 'r');
 
         //read data
-        while ($line = fgets($fh))
+        while ($line = fgets($fileHandle))
         {
             if (substr($line, 0, 1) == '!')
                 continue;
             //for each char
             for ($i = 0; $i < strlen($line); $i++)
             {
-                if ( substr($line, $i, 1) == 'O' )
-                    $_board->setCell($i , $posY, 1);
+                if (substr($line, $i, 1) == 'O')
+                    $_board->setCell($i, $posY, 1);
             }
 
-            $posY+= 1;
+            $posY += 1;
         }
-        fclose($fh);
+        fclose($fileHandle);
     }
 
     /**

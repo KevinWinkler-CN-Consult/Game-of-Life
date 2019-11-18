@@ -3,6 +3,7 @@
 use GOL\Boards\Board;
 use GOL\Boards\history;
 use GOL\Input\Input;
+use GOL\Output\Output;
 use Ulrichsg\Getopt;
 
 require_once "include.php";
@@ -12,10 +13,18 @@ $maxIteration = 21;
 $version = "1.2";
 $width = 10;
 $height = 10;
+$historyLength = 2;
 
+/**
+ * @var Board $field
+ * @var Input $inputs
+ * @var Output $output
+ * @var Output $outputs
+ */
 $field = null;
-/** @var Input */
 $inputs = [];
+$output = null;
+$outputs = [];
 
 $getOpt = new Getopt(
     [
@@ -27,7 +36,10 @@ $getOpt = new Getopt(
         ['m', 'maxIterations', Getopt::REQUIRED_ARGUMENT, "Maximum number of iterations"],
 
         [null, 'input', Getopt::REQUIRED_ARGUMENT, "Specifies the input"],
-        [null, 'inputList', Getopt::NO_ARGUMENT, "Prints a list of all available inputs"]
+        [null, 'inputList', Getopt::NO_ARGUMENT, "Prints a list of all available inputs"],
+
+        [null, 'output', Getopt::REQUIRED_ARGUMENT, "Specifies the output"],
+        [null, 'outputList', Getopt::NO_ARGUMENT, "Prints a list of all available output"]
     ]);
 
 foreach ($files = glob("input/*") as $file)
@@ -42,6 +54,21 @@ foreach ($files = glob("input/*") as $file)
     {
         $inputs[$basename] = new $classname;
         end($inputs)->register($getOpt);
+    }
+}
+
+foreach ($files = glob("output/*") as $file)
+{
+    $basename = basename($file, ".php");
+    $classname = "\\GOL\\Output\\" . $basename;
+
+    if ($basename == "output")
+        continue;
+
+    if (class_exists($classname))
+    {
+        $outputs[$basename] = new $classname;
+        end($outputs)->register($getOpt);
     }
 }
 
@@ -67,6 +94,15 @@ if ($getOpt->getOption("inputList"))
     }
     die;
 }
+if ($getOpt->getOption("outputList"))
+{
+    echo "Available outputs\n";
+    foreach ($outputs as $type => $out)
+    {
+        echo $type . " " . $out->description() . "\n";
+    }
+    die;
+}
 
 
 if ($getOpt->getOption('width'))
@@ -86,6 +122,20 @@ if ($getOpt->getOption('m'))
     $maxIteration = intval($getOpt->getOption('m'));
 }
 
+if ($getOpt->getOption("output"))
+{
+    $arg = $getOpt->getOption("output");
+
+    foreach ($outputs as $type => $out)
+    {
+        if ($type == $arg)
+        {
+            $output = $out;
+            $output->checkParameters($getOpt);
+            break;
+        }
+    }
+}
 
 if ($getOpt->getOption("input"))
 {
@@ -115,16 +165,20 @@ if ($field == null)
     $field->setCell(2, 2, 1);
 }
 
+if ($output == null)
+{
+    echo "An output has to be defined!\n";
+    die;
+}
 
 $history = new history($field);
 
 for ($i = 0; $i < $maxIteration; $i++)
 {
-    echo "Generation:$i\n";
-    $field->printBoard();
+    $output->write($field);
     $field->nextGeneration();
 
-    if ($history->stackSize() > 2)
+    if ($history->stackSize() > $historyLength)
         $history->pop();
 
     if ($history->compare($field))
@@ -132,3 +186,5 @@ for ($i = 0; $i < $maxIteration; $i++)
 
     $history->push($field);
 }
+
+$output->flush();

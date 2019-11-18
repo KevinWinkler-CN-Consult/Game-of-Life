@@ -30,6 +30,7 @@ abstract class Input
 
     /**
      * Returns the description of the Input.
+     * This is used to list all inputs if the argument inputList is set.
      * @return string description.
      */
     public function description(): string
