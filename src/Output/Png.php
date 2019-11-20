@@ -13,7 +13,7 @@ use GetOpt\Getopt;
  * Use write() to write the Board data to the output.
  * and flush() to write it on the disc.
  */
-class PNG extends Output
+class Png extends Output
 {
     private $index = 0;
     private $cellSize = 1;

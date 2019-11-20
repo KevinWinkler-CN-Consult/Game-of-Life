@@ -5,3 +5,4 @@ Vagrantfile
 /vendor/
 /.phpunit.result.cache
 /test/in/
+/test/out/
