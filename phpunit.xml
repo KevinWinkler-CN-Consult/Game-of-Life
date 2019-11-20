@@ -4,6 +4,7 @@
             <directory>/vagrant/src/</directory>
             <exclude>
                 <directory>/vagrant/vendor/</directory>
+                <directory>/vagrant/src/AnimGif/</directory>
             </exclude>
         </whitelist>
     </filter>
