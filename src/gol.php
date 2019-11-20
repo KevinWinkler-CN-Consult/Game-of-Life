@@ -2,7 +2,7 @@
 
 use GetOpt\GetOpt;
 use GOL\Boards\Board;
-use GOL\Boards\history;
+use GOL\Boards\History;
 use GOL\Input\Input;
 use GOL\Output\Output;
 
@@ -41,12 +41,12 @@ $getOpt = new Getopt(
         [null, 'outputList', Getopt::NO_ARGUMENT, "Prints a list of all available output"]
     ]);
 
-foreach ($files = glob("input/*") as $file)
+foreach ($files = glob("Input/*") as $file)
 {
     $basename = basename($file, ".php");
     $classname = "\\GOL\\Input\\" . $basename;
 
-    if ($basename == "input")
+    if ($basename == "Input")
         continue;
 
     if (class_exists($classname))
@@ -56,12 +56,12 @@ foreach ($files = glob("input/*") as $file)
     }
 }
 
-foreach ($files = glob("output/*") as $file)
+foreach ($files = glob("Output/*") as $file)
 {
     $basename = basename($file, ".php");
     $classname = "\\GOL\\Output\\" . $basename;
 
-    if ($basename == "output")
+    if ($basename == "Output")
         continue;
 
     if (class_exists($classname))
@@ -170,7 +170,7 @@ if ($output == null)
     die;
 }
 
-$history = new history($field);
+$history = new History($field);
 
 for ($i = 0; $i < $maxIteration; $i++)
 {

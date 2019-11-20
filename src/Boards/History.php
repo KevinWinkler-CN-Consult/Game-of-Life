@@ -8,7 +8,7 @@ namespace GOL\Boards;
  * Use compare() to compare the current board with the previous versions.
  * Use push() to add the current board to the history and pop() to remove the oldest board.
  */
-class history
+class History
 {
     protected $previousBoards = [];
 
