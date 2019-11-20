@@ -6,7 +6,7 @@ use GifCreator\AnimGif;
 use GOL\Boards\Board;
 use GetOpt\Getopt;
 
-require_once "animgif/AnimGif.php";
+require_once "seasonal.php";
 
 /**
  * Saves the board as a gif.
@@ -60,7 +60,7 @@ class Gif extends Output
         $animGif = new AnimGif();
         try
         {
-            $animGif->create("out/", 1);
+            $animGif->create("out/", $this->delay);
             $animGif->save("out/output.gif");
             exec("rm out/img*");
         }
@@ -76,8 +76,8 @@ class Gif extends Output
      */
     public function checkParameters(Getopt $_getopt): void
     {
-        $this->delay = $_getopt->getOption("gifDelay");
-        if ($this->delay <= 0.0)
+        $this->delay = intval($_getopt->getOption("gifDelay"));
+        if ($this->delay <= 0)
             $this->delay = 1;
 
         $this->cellSize = $_getopt->getOption("gifCellSize");
