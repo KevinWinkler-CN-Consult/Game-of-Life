@@ -71,11 +71,11 @@ foreach ($files = glob("Output/*") as $file)
     }
 }
 
-$getOpt->parse();
+$getOpt->process();
 
 if ($getOpt->getOption('h'))
 {
-    $getOpt->showHelp();
+    echo $getOpt->getHelpText();
     die;
 }
 if ($getOpt->getOption('v'))
