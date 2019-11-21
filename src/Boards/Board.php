@@ -91,19 +91,19 @@ class Board
      */
     private function countLivingNeighbours($_x, $_y)
     {
+        $livingNeighbourCount = -1;
         // out of bounds and margin check
-        if ($_x < 1 || $_y < 1 || $_x > $this->width || $_y > $this->height)
-            return -1;
-
-        $relativeNeighbourIndices = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
-        $livingNeighbourCount = 0;
-
-        foreach ($relativeNeighbourIndices as $relativeNeighbour)
+        if ($_x >= 1 and $_y >= 1 and $_x < $this->width and $_y < $this->height)
         {
-            if ($this->grid[$_x + $relativeNeighbour[0]][$_y + $relativeNeighbour[1]] == 1)
-                $livingNeighbourCount++;
-        }
+            $relativeNeighbourIndices = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
+            $livingNeighbourCount++;
 
+            foreach ($relativeNeighbourIndices as $relativeNeighbour)
+            {
+                if ($this->grid[$_x + $relativeNeighbour[0]][$_y + $relativeNeighbour[1]] == 1)
+                    $livingNeighbourCount++;
+            }
+        }
         return $livingNeighbourCount;
     }
 
@@ -116,6 +116,9 @@ class Board
     public function compare(Board $_board)
     {
         $equal = true;
+
+        if ($_board->height() != $this->height() || $_board->width() != $this->width())
+            return false;
 
         for ($y = 1; $y < $_board->height() + 1; $y++)
         {

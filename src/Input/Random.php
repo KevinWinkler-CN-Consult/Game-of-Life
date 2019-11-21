@@ -2,8 +2,8 @@
 
 namespace GOL\Input;
 
-use GOL\Boards\Board;
 use GetOpt\Getopt;
+use GOL\Boards\Board;
 
 /**
  * Fill the board with random values.
@@ -21,16 +21,14 @@ class Random extends Input
     public function prepareBoard(Board &$_board, Getopt $_getopt): void
     {
         $density = 50;
-        if ($_getopt->getOption("randomDensity"))
-        {
+        if ($_getopt->getOption("randomDensity") != null)
             $density = intval($_getopt->getOption("randomDensity"));
-        }
 
         for ($y = 0; $y < $_board->height(); $y++)
         {
             for ($x = 0; $x < $_board->width(); $x++)
             {
-                $_board->setCell($x, $y, (rand(0, 100) < $density ? 1 : 0));
+                $_board->setCell($x, $y, (rand(0, 99) < $density ? 1 : 0));
             }
         }
     }
