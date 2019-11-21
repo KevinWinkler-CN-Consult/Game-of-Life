@@ -16,7 +16,6 @@ class AcornTest extends TestCase
 
     protected function setUp(): void
     {
-
         $this->input = new Acorn();
         $this->getOpt = new GetOptMock();
     }
@@ -37,6 +36,24 @@ class AcornTest extends TestCase
             [0, 1, 0, 0, 0],
             [0, 1, 0, 0, 0],
             [0, 0, 0, 0, 0]];
+
+        $this->input->prepareBoard($board, $this->getOpt);
+
+        $this->assertEquals($array, $board->getGrid());
+    }
+
+    /**
+     * @test
+     */
+    public function prepareSmallBoard()
+    {
+        $board = new Board(5, 5);
+        $array = [
+            [0, 1, 0, 1, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0],
+            [0, 1, 0, 0, 0],
+            [0, 1, 0, 0, 0]];
 
         $this->input->prepareBoard($board, $this->getOpt);
 

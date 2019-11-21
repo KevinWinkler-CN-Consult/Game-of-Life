@@ -45,7 +45,7 @@ class RandomTest extends TestCase
     }
 
     /**
-     * @testignored
+     * @test
      */
     public function prepareBoardWithDensity100()
     {
@@ -57,6 +57,26 @@ class RandomTest extends TestCase
             [1, 1, 1, 1, 1],
             [1, 1, 1, 1, 1],
             [1, 1, 1, 1, 1]
+        ];
+
+        $this->input->prepareBoard($board, $this->getOpt);
+
+        $this->assertEquals($array, $board->getGrid());
+    }
+
+    /**
+     * @test
+     */
+    public function prepareBoardWithDensity0()
+    {
+        $board = new Board(5, 5);
+        $this->getOpt->setOptions(["randomDensity" => "0"]);
+        $array = [
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]
         ];
 
         $this->input->prepareBoard($board, $this->getOpt);

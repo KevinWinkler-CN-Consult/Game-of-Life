@@ -91,7 +91,7 @@ class VideoTest extends TestCase
      */
     public function writeBoardWithDifferentCellSize()
     {
-        $this->getopt->setOptions(["videoCellSize"=>"2"]);
+        $this->getopt->setOptions(["videoCellSize" => "2"]);
         $this->output->checkParameters($this->getopt);
         $this->board->setCell(0, 0, 1);
         $this->output->write($this->board);

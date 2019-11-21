@@ -2,7 +2,6 @@
 
 namespace Input;
 
-use GetOpt\GetOpt;
 use GetOptMock;
 use GOL\Boards\Board;
 use GOL\Input\Glider;
@@ -56,6 +55,21 @@ class GliderTest extends TestCase
     /**
      * @test
      */
+    public function prepareBoard3()
+    {
+        $board = new Board(2, 2);
+        $array = [
+            [0, 1],
+            [1, 1]];
+
+        $this->input->prepareBoard($board, $this->getOpt);
+
+        $this->assertEquals($array, $board->getGrid());
+    }
+
+    /**
+     * @test
+     */
     public function prepareBoardGetOpt()
     {
         $this->getOpt->setOptions(["gliderPosition" => "1,1"]);
@@ -83,6 +97,25 @@ class GliderTest extends TestCase
             [0, 0, 1, 0, 0],
             [1, 0, 1, 0, 0],
             [0, 1, 1, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]];
+
+        $this->input->prepareBoard($board, $this->getOpt);
+
+        $this->assertEquals($array, $board->getGrid());
+    }
+
+    /**
+     * @test
+     */
+    public function prepareBoardGetOpt3()
+    {
+        $this->getOpt->setOptions(["gliderPosition" => "-1,0"]);
+        $board = new Board(5, 5);
+        $array = [
+            [1, 0, 1, 0, 0],
+            [0, 1, 1, 0, 0],
+            [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0]];
 

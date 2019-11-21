@@ -70,6 +70,23 @@ OOO');
     /**
      * @test
      */
+    public function prepareSmallBoardWithArgument()
+    {
+        $this->getOpt->setOptions(["plaintextFile" => "in/plain.cells"]);
+
+        $board = new Board(2, 2);
+        $array = [
+            [0, 1],
+            [1, 0]];
+
+        $this->input->prepareBoard($board, $this->getOpt);
+
+        $this->assertEquals($array, $board->getGrid());
+    }
+
+    /**
+     * @test
+     */
     public function description()
     {
         $this->assertIsString($this->input->description());

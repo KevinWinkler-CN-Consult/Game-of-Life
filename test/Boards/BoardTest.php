@@ -104,6 +104,24 @@ class BoardTest extends TestCase
     /**
      * @test
      */
+    public function compareSmallerBoardsReturnsFalse()
+    {
+        $nonEmptyBoard = new Board(4, 4);
+        $this->assertNotTrue($this->board->compare($nonEmptyBoard));
+    }
+
+    /**
+     * @test
+     */
+    public function compareBiggerBoardsReturnsFalse()
+    {
+        $nonEmptyBoard = new Board(6, 6);
+        $this->assertNotTrue($this->board->compare($nonEmptyBoard));
+    }
+
+    /**
+     * @test
+     */
     public function emptyBoardYieldsEmptyBoardAfterNextGeneration()
     {
         $emptyBoard = new Board(5, 5);

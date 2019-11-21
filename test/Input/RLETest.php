@@ -69,6 +69,23 @@ bob$2bo$3o!');
     /**
      * @test
      */
+    public function prepareSmallBoardWithArgument()
+    {
+        $this->getOpt->setOptions(["rleFile" => "in/plain.rle"]);
+
+        $board = new Board(2, 2);
+        $array = [
+            [0, 1],
+            [1, 1]];
+
+        $this->input->prepareBoard($board, $this->getOpt);
+
+        $this->assertEquals($array, $board->getGrid());
+    }
+
+    /**
+     * @test
+     */
     public function prepareBoardWithArgumentAndPosition()
     {
         $this->getOpt->setOptions(["rleFile" => "in/plain.rle", "rlePosition" => "0,0"]);
@@ -80,6 +97,23 @@ bob$2bo$3o!');
             [0, 1, 1, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0]];
+
+        $this->input->prepareBoard($board, $this->getOpt);
+
+        $this->assertEquals($array, $board->getGrid());
+    }
+
+    /**
+     * @test
+     */
+    public function prepareSmallBoardWithArgumentAndPosition()
+    {
+        $this->getOpt->setOptions(["rleFile" => "in/plain.rle"]);
+
+        $board = new Board(2, 2);
+        $array = [
+            [0, 1],
+            [1, 1]];
 
         $this->input->prepareBoard($board, $this->getOpt);
 
