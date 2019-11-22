@@ -3,6 +3,7 @@
 namespace GOL\Input;
 
 use GetOpt\Getopt;
+use GetOpt\Option;
 use GOL\Boards\Board;
 
 /**
@@ -62,14 +63,14 @@ class Plaintext extends Input
 
     /**
      * Register all optional parameters of an Input, if any.
-     * @param Getopt $_getopt Option manager to add the options
+     * @return array Array of options.
      */
-    public function register(Getopt $_getopt): void
+    public function register(): array
     {
-        $_getopt->addOptions(
-            [
-                [null, "plaintextFile", Getopt::REQUIRED_ARGUMENT, "Pattern to load"]
-            ]);
+        $result[] = new Option(null, "plaintextFile", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Pattern to load");
+
+        return $result;
     }
 
     /**

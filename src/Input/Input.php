@@ -22,10 +22,11 @@ abstract class Input
 
     /**
      * Register all optional parameters of an Input, if any.
-     * @param Getopt $_getopt Option manager to add the options
+     * @return array Array of options.
      */
-    public function register(Getopt $_getopt): void
+    public function register(): array
     {
+        return [];
     }
 
     /**

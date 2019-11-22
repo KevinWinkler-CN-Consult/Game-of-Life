@@ -52,7 +52,7 @@ foreach ($files = glob("Input/*") as $file)
     if (class_exists($classname))
     {
         $inputs[$basename] = new $classname;
-        end($inputs)->register($getOpt);
+        $getOpt->addOptions(end($inputs)->register());
     }
 }
 

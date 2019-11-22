@@ -3,6 +3,7 @@
 namespace GOL\Input;
 
 use GetOpt\Getopt;
+use GetOpt\Option;
 use GOL\Boards\Board;
 
 /**
@@ -35,14 +36,14 @@ class Random extends Input
 
     /**
      * Register all optional parameters of an Input, if any.
-     * @param Getopt $_getopt Option manager to add the options
+     * @return array Array of options.
      */
-    public function register(Getopt $_getopt): void
+    public function register(): array
     {
-        $_getopt->addOptions(
-            [
-                [null, "randomDensity", Getopt::REQUIRED_ARGUMENT, "Density of the random distribution in 1-100%"]
-            ]);
+        $result[] = new Option(null, "randomDensity", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Density of the random distribution in 1-100%");
+
+        return $result;
     }
 
     /**

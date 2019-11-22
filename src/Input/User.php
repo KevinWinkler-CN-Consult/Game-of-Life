@@ -48,14 +48,6 @@ class User extends Input
     }
 
     /**
-     * Register all optional parameters of an Input, if any.
-     * @param Getopt $_getopt Option manager to add the options
-     */
-    public function register(Getopt $_getopt): void
-    {
-    }
-
-    /**
      * Returns the description of the Input.
      * @return string description.
      */

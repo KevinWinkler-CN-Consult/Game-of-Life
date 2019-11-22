@@ -3,6 +3,7 @@
 namespace GOL\Input;
 
 use GetOpt\Getopt;
+use GetOpt\Option;
 use GOL\Boards\Board;
 
 /**
@@ -86,12 +87,13 @@ class RLE extends Input
         }
 
         //read data
+        $run = true;
         while ($line = fgets($fileHandle))
         {
             $numberStart = -1;
 
             //for each char
-            for ($i = 0; $i < strlen($line); $i++)
+            for ($i = 0; $i < strlen($line) && $run; $i++)
             {
                 $char = substr($line, $i, 1);
 
@@ -109,7 +111,9 @@ class RLE extends Input
                 switch ($char)
                 {
                     case '!':
-                        return;
+
+                        $run = false;
+                        break;
                     case '$':
                         $posX = 0;
                         $posY += $runCount;
@@ -132,15 +136,17 @@ class RLE extends Input
 
     /**
      * Register all optional parameters of an Input, if any.
-     * @param Getopt $_getopt Option manager to add the options
+     * @return array Array of options.
      */
-    public function register(Getopt $_getopt): void
+    public function register(): array
     {
-        $_getopt->addOptions(
-            [
-                [null, "rleFile", Getopt::REQUIRED_ARGUMENT, "Pattern to load"],
-                [null, "rlePosition", Getopt::REQUIRED_ARGUMENT, "Sets the position of the pattern \"x,y\""]
-            ]);
+        $result[] = new Option(null, "rleFile", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Pattern to load");
+
+        $result[] = new Option(null, "rlePosition", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Sets the position of the pattern \"x,y\"");
+
+        return $result;
     }
 
     /**

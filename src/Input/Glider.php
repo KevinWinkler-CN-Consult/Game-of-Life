@@ -3,6 +3,7 @@
 namespace GOL\Input;
 
 use GetOpt\Getopt;
+use GetOpt\Option;
 use GOL\Boards\Board;
 
 /**
@@ -41,14 +42,16 @@ class Glider extends Input
 
     /**
      * Register all optional parameters of an Input, if any.
-     * @param Getopt $_getopt Option manager to add the options
+     * @return array Array of options.
      */
-    public function register(Getopt $_getopt): void
+    public function register(): array
     {
-        $_getopt->addOptions(
-            [
-                [null, "gliderPosition", Getopt::REQUIRED_ARGUMENT, "Sets the position of the glider \"x,y\""]
-            ]);
+        $result = [];
+
+        $result[] = new Option(null, "gliderPosition", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Sets the position of the glider \"x,y\"");
+
+        return $result;
     }
 
     /**
