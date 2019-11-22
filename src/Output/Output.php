@@ -36,11 +36,12 @@ abstract class Output
     }
 
     /**
-     * Register all optional parameters of an Output, if any.
-     * @param Getopt $_getopt Option manager to add the options
+     * Register all optional parameters of an Input, if any.
+     * @return array Array of options.
      */
-    public function register(Getopt $_getopt): void
+    public function register(): array
     {
+        return [];
     }
 
     /**

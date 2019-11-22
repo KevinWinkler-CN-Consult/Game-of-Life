@@ -67,7 +67,7 @@ foreach ($files = glob("Output/*") as $file)
     if (class_exists($classname))
     {
         $outputs[$basename] = new $classname;
-        end($outputs)->register($getOpt);
+        $getOpt->addOptions(end($outputs)->register());
     }
 }
 
