@@ -4,6 +4,7 @@ namespace GOL\Output;
 
 use GetOpt\Getopt;
 use GOL\Boards\Board;
+use GOL\Helper\Clock;
 
 /**
  * Base class for pluggable outputs.
@@ -13,6 +14,8 @@ use GOL\Boards\Board;
  */
 abstract class Output
 {
+    protected $clock = null;
+
     /**
      * Writes the current board to the Output.
      *
@@ -52,5 +55,10 @@ abstract class Output
     public function description(): string
     {
         return "";
+    }
+
+    public function setClock(Clock $clock)
+    {
+        $this->clock = $clock;
     }
 }

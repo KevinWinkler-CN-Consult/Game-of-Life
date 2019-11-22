@@ -86,7 +86,7 @@ class Gif extends Output
         if ($this->cellSize <= 0)
             $this->cellSize = 1;
 
-        $seasonalColor = getHolidayColor();
+        $seasonalColor = getHolidayColor($this->clock);
 
         if (count($seasonalColor) == 6)
         {
