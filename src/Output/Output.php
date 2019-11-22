@@ -2,8 +2,8 @@
 
 namespace GOL\Output;
 
-use GOL\Boards\Board;
 use GetOpt\Getopt;
+use GOL\Boards\Board;
 
 /**
  * Base class for pluggable outputs.

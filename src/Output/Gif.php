@@ -2,9 +2,9 @@
 
 namespace GOL\Output;
 
+use GetOpt\Getopt;
 use GifCreator\AnimGif;
 use GOL\Boards\Board;
-use GetOpt\Getopt;
 
 require_once "seasonal.php";
 

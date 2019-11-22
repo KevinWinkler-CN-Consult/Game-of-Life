@@ -3,7 +3,6 @@
 namespace GOL\Output;
 
 use GOL\Boards\Board;
-use GetOpt\Getopt;
 
 /**
  * Prints the board to the console.

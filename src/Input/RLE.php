@@ -2,8 +2,8 @@
 
 namespace GOL\Input;
 
-use GOL\Boards\Board;
 use GetOpt\Getopt;
+use GOL\Boards\Board;
 
 /**
  * Fills the board with a specific pattern saved in the Run Length Encoded(.rle) format.

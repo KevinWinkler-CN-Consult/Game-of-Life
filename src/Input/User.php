@@ -2,9 +2,9 @@
 
 namespace GOL\Input;
 
+use GetOpt\Getopt;
 use GOL\Boards\Board;
 use GOL\Output\Console;
-use GetOpt\Getopt;
 
 /**
  * User input

@@ -30,7 +30,7 @@ class History
     {
         foreach ($this->previousBoards as $previousBoard)
         {
-            if($_board->compare($previousBoard))
+            if ($_board->compare($previousBoard))
                 return true;
         }
         return false;
