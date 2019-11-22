@@ -2,6 +2,10 @@
 
 namespace Output;
 
+require_once "ClockMock.php";
+
+use ClockMock;
+use GetOpt\Option;
 use GetOptMock;
 use GOL\Boards\Board;
 use GOL\Output\Png;
@@ -51,6 +55,47 @@ class PNGTest extends TestCase
         $image = imagecreate(5, 5);
         imagecolorallocate($image, 255, 255, 255);
         imagecolorallocate($image, 0, 0, 0);
+        imagepng($image, "in/emptywhite.png");
+
+        $this->assertEquals(file_get_contents("out/img-000.png"), file_get_contents("in/emptywhite.png"));
+    }
+
+    /**
+     * @test
+     */
+    public function writeBoardWithHolidayColors()
+    {
+        $this->output->setClock(new ClockMock("31-10"));
+        $this->output->checkParameters($this->getopt);
+        $this->board->setCell(0, 0, 1);
+        $this->output->write($this->board);
+        $this->output->flush();
+
+        $image = imagecreate(5, 5);
+        imagecolorallocate($image, 0, 0, 0);
+        $t = imagecolorallocate($image, 255, 153, 0);
+        imagesetpixel($image, 0, 0, $t);
+        imagepng($image, "in/emptywhite.png");
+
+        $this->assertEquals(file_get_contents("out/img-000.png"), file_get_contents("in/emptywhite.png"));
+    }
+
+    /**
+     * @test
+     */
+    public function writeBoardWithNoHolidayColorsIfCustomColorIsSet()
+    {
+        $this->getopt->setOptions(["pngBackgroundColor" => "255,255,255", "pngCellColor" => "0,0,0"]);
+        $this->output->setClock(new ClockMock("31-10"));
+        $this->output->checkParameters($this->getopt);
+        $this->board->setCell(0, 0, 1);
+        $this->output->write($this->board);
+        $this->output->flush();
+
+        $image = imagecreate(5, 5);
+        imagecolorallocate($image, 255, 255, 255);
+        $t = imagecolorallocate($image, 0, 0, 0);
+        imagesetpixel($image, 0, 0, $t);
         imagepng($image, "in/emptywhite.png");
 
         $this->assertEquals(file_get_contents("out/img-000.png"), file_get_contents("in/emptywhite.png"));
@@ -117,6 +162,19 @@ class PNGTest extends TestCase
         imagepng($image, "in/expectedwhite.png");
 
         $this->assertEquals(file_get_contents("out/img-000.png"), file_get_contents("in/expectedwhite.png"));
+    }
+
+    /**
+     * @test
+     */
+    public function register()
+    {
+        $options = $this->output->register();
+        $this->assertIsArray($options);
+        foreach ($options as $option)
+        {
+            $this->assertTrue($option instanceof Option);
+        }
     }
 
     /**

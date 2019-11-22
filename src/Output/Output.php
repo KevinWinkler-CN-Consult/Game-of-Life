@@ -11,6 +11,7 @@ use GOL\Helper\Clock;
  *
  * Implement write() to write the Board data to the output and
  * implement flush() to output the data.
+ * @codeCoverageIgnore
  */
 abstract class Output
 {
