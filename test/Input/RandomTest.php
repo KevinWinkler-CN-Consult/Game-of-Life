@@ -2,6 +2,7 @@
 
 namespace Input;
 
+use GetOpt\Option;
 use GetOptMock;
 use GOL\Boards\Board;
 use GOL\Input\Random;
@@ -47,21 +48,27 @@ class RandomTest extends TestCase
     /**
      * @test
      */
-    public function prepareBoardWithDensity100()
+    public function prepareBoardWithDensity90()
     {
         $board = new Board(5, 5);
-        $this->getOpt->setOptions(["randomDensity" => "100"]);
-        $array = [
-            [1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1]
-        ];
+        $this->getOpt->setOptions(["randomDensity" => "90"]);
 
         $this->input->prepareBoard($board, $this->getOpt);
 
-        $this->assertEquals($array, $board->getGrid());
+        $this->assertNotTrue($this->isGridZero($board->getGrid()));
+    }
+
+    /**
+     * @test
+     */
+    public function register()
+    {
+        $options = $this->input->register();
+        $this->assertIsArray($options);
+        foreach ($options as $option)
+        {
+            $this->assertTrue($option instanceof Option);
+        }
     }
 
     /**

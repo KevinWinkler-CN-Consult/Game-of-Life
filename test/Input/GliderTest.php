@@ -2,6 +2,7 @@
 
 namespace Input;
 
+use GetOpt\Option;
 use GetOptMock;
 use GOL\Boards\Board;
 use GOL\Input\Glider;
@@ -122,6 +123,19 @@ class GliderTest extends TestCase
         $this->input->prepareBoard($board, $this->getOpt);
 
         $this->assertEquals($array, $board->getGrid());
+    }
+
+    /**
+     * @test
+     */
+    public function register()
+    {
+        $options = $this->input->register();
+        $this->assertIsArray($options);
+        foreach ($options as $option)
+        {
+            $this->assertTrue($option instanceof Option);
+        }
     }
 
     /**

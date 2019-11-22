@@ -5,6 +5,7 @@
             <exclude>
                 <directory>/vagrant/vendor/</directory>
                 <directory>/vagrant/src/AnimGif/</directory>
+                <file>/vagrant/src/gol.php</file>
             </exclude>
         </whitelist>
     </filter>

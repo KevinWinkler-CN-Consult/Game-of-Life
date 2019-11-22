@@ -10,6 +10,7 @@ use GOL\Boards\Board;
  *
  * Implement prepareBoard() to fill a Board in a specific way
  * and register() to register optional arguments.
+ * @codeCoverageIgnore
  */
 abstract class Input
 {
