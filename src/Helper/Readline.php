@@ -4,7 +4,7 @@
 namespace GOL\Helper;
 
 /**
- * A simple read line wraper to allow tests.
+ * A simple read line wrapper to allow tests.
  * @codeCoverageIgnore
  */
 class Readline

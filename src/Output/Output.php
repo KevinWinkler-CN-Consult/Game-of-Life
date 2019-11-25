@@ -58,6 +58,10 @@ abstract class Output
         return "";
     }
 
+    /**
+     * Sets the clock that should be used.
+     * @param Clock $clock Clock to use.
+     */
     public function setClock(Clock $clock)
     {
         $this->clock = $clock;
