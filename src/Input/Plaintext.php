@@ -63,14 +63,13 @@ class Plaintext extends Input
 
     /**
      * Register all optional parameters of an Input, if any.
-     * @return array Array of options.
+     * @return Option[] Array of options.
      */
     public function register(): array
     {
-        $result[] = new Option(null, "plaintextFile", Getopt::REQUIRED_ARGUMENT);
-        end($result)->setDescription("Pattern to load");
-
-        return $result;
+        $plaintextLocationOption = new Option(null, "plaintextFile", Getopt::REQUIRED_ARGUMENT);
+        $plaintextLocationOption->setDescription("Pattern to load");
+        return [$plaintextLocationOption];
     }
 
     /**

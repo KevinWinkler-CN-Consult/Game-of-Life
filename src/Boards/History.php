@@ -49,7 +49,7 @@ class History
     /**
      * Removes the oldest board from the history.
      */
-    public function pop()
+    public function removeOldestBoard()
     {
         array_pop($this->previousBoards);
     }

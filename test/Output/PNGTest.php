@@ -8,6 +8,7 @@ use ClockMock;
 use GetOpt\Option;
 use GetOptMock;
 use GOL\Boards\Board;
+use GOL\Helper\Clock;
 use GOL\Output\Png;
 use PHPUnit\Framework\TestCase;
 
@@ -65,7 +66,7 @@ class PNGTest extends TestCase
      */
     public function writeBoardWithHolidayColors()
     {
-        $this->output->setClock(new ClockMock("31-10"));
+        $this->output->overrideClock(new ClockMock("31-10"));
         $this->output->checkParameters($this->getopt);
         $this->board->setCell(0, 0, 1);
         $this->output->write($this->board);
@@ -86,7 +87,7 @@ class PNGTest extends TestCase
     public function writeBoardWithNoHolidayColorsIfCustomColorIsSet()
     {
         $this->getopt->setOptions(["pngBackgroundColor" => "255,255,255", "pngCellColor" => "0,0,0"]);
-        $this->output->setClock(new ClockMock("31-10"));
+        $this->output->overrideClock(new ClockMock("31-10"));
         $this->output->checkParameters($this->getopt);
         $this->board->setCell(0, 0, 1);
         $this->output->write($this->board);

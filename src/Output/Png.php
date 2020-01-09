@@ -107,7 +107,7 @@ class Png extends Output
 
     /**
      * Register all optional parameters of an Input, if any.
-     * @return array Array of options.
+     * @return Option[] Array of options.
      */
     public function register(): array
     {

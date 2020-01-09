@@ -3,6 +3,7 @@
 namespace GOL\Input;
 
 use GetOpt\Getopt;
+use GetOpt\Option;
 use GOL\Boards\Board;
 
 /**
@@ -23,7 +24,7 @@ abstract class Input
 
     /**
      * Register all optional parameters of an Input, if any.
-     * @return array Array of options.
+     * @return Option[] Array of options.
      */
     public function register(): array
     {

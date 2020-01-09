@@ -63,7 +63,10 @@ class Video extends Output
         }
 
         exec("ffmpeg -framerate " . $this->fps . " -i out/img-%03d.png out/video.avi");
-        exec("rm out/img*");
+        foreach (glob("out/img*") as $filename)
+        {
+            unlink($filename);
+        }
 
         $this->buffer = [];
     }
@@ -125,7 +128,7 @@ class Video extends Output
 
     /**
      * Register all optional parameters of an Input, if any.
-     * @return array Array of options.
+     * @return Option[] Array of options.
      */
     public function register(): array
     {

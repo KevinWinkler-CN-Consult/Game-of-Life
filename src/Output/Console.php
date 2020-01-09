@@ -3,6 +3,7 @@
 namespace GOL\Output;
 
 use GOL\Boards\Board;
+use GOL\Helper\Clock;
 
 /**
  * Prints the board to the console.

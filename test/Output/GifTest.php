@@ -23,7 +23,10 @@ class GifTest extends TestCase
         $this->board = new Board(5, 5);
         $this->getopt = new GetOptMock();
         $this->animGif = new AnimGif();
-        exec("rm out/*");
+        foreach (glob("out/*") as $filename)
+        {
+            unlink($filename);
+        }
     }
 
     /**
@@ -98,7 +101,7 @@ class GifTest extends TestCase
      */
     public function writeBoardWithHolidayColors()
     {
-        $this->output->setClock(new ClockMock("31-10"));
+        $this->output->overrideClock(new ClockMock("31-10"));
         $this->output->checkParameters($this->getopt);
         $this->output->write($this->board);
         $this->board->setCell(0, 0, 1);
@@ -123,7 +126,7 @@ class GifTest extends TestCase
     public function writeBoardWithNoHolidayColorsIfCustomColorIsSet()
     {
         $this->getopt->setOptions(["gifBackgroundColor" => "255,255,255", "gifCellColor" => "0,0,0"]);
-        $this->output->setClock(new ClockMock("31-10"));
+        $this->output->overrideClock(new ClockMock("31-10"));
         $this->output->checkParameters($this->getopt);
         $this->output->write($this->board);
         $this->board->setCell(0, 0, 1);

@@ -36,14 +36,13 @@ class Random extends Input
 
     /**
      * Register all optional parameters of an Input, if any.
-     * @return array Array of options.
+     * @return Option[] Array of options.
      */
     public function register(): array
     {
-        $result[] = new Option(null, "randomDensity", Getopt::REQUIRED_ARGUMENT);
-        end($result)->setDescription("Density of the random distribution in 1-100%");
-
-        return $result;
+        $densityOption = new Option(null, "randomDensity", Getopt::REQUIRED_ARGUMENT);
+        $densityOption->setDescription("Density of the random distribution in 1-100%");
+        return [$densityOption];
     }
 
     /**

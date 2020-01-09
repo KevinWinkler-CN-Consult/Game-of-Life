@@ -3,6 +3,7 @@
 namespace GOL\Output;
 
 use GetOpt\Getopt;
+use GetOpt\Option;
 use GOL\Boards\Board;
 use GOL\Helper\Clock;
 
@@ -15,7 +16,16 @@ use GOL\Helper\Clock;
  */
 abstract class Output
 {
-    protected $clock = null;
+    protected $clock;
+
+    /**
+     * @param Clock $_clock Clock object to use.
+     */
+    public function __construct( Clock $_clock = null )
+    {
+        $clock = $_clock ?? new Clock();
+        $this->clock = $clock;
+    }
 
     /**
      * Writes the current board to the Output.
@@ -41,7 +51,7 @@ abstract class Output
 
     /**
      * Register all optional parameters of an Input, if any.
-     * @return array Array of options.
+     * @return Option[] Array of options.
      */
     public function register(): array
     {
@@ -59,10 +69,10 @@ abstract class Output
     }
 
     /**
-     * Sets the clock that should be used.
+     * Override the default clock with another.
      * @param Clock $clock Clock to use.
      */
-    public function setClock(Clock $clock)
+    public function overrideClock(Clock $clock)
     {
         $this->clock = $clock;
     }

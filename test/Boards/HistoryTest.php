@@ -33,7 +33,7 @@ class HistoryTest extends TestCase
     public function popDecreasesStackSize()
     {
         $this->assertEquals(1, $this->history->stackSize());
-        $this->history->pop();
+        $this->history->removeOldestBoard();
         $this->assertEquals(0, $this->history->stackSize());
     }
 
@@ -42,9 +42,9 @@ class HistoryTest extends TestCase
      */
     public function popFromEmptyHistory()
     {
-        $this->history->pop();
+        $this->history->removeOldestBoard();
         $this->assertEquals(0, $this->history->stackSize());
-        $this->history->pop();
+        $this->history->removeOldestBoard();
         $this->assertEquals(0, $this->history->stackSize());
     }
 

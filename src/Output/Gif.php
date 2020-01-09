@@ -64,7 +64,10 @@ class Gif extends Output
         {
             $animGif->create("out/", $this->delay);
             $animGif->save("out/output.gif");
-            exec("rm out/img*");
+            foreach (glob("out/img*") as $filename)
+            {
+                unlink($filename);
+            }
         }
         catch (Exception $e)
         {
@@ -131,7 +134,7 @@ class Gif extends Output
 
     /**
      * Register all optional parameters of an Input, if any.
-     * @return array Array of options.
+     * @return Option[] Array of options.
      */
     public function register(): array
     {

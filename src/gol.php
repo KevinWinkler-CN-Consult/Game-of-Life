@@ -178,7 +178,7 @@ for ($i = 0; $i < $maxIteration; $i++)
     $field->nextGeneration();
 
     if ($history->stackSize() > $historyLength)
-        $history->pop();
+        $history->removeOldestBoard();
 
     if ($history->compare($field))
         break;

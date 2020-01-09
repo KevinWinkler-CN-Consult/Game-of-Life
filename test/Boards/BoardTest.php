@@ -59,7 +59,7 @@ class BoardTest extends TestCase
     /**
      * @test
      */
-    public function setGridCreatesNonEmptyGrid()
+    public function setCellCreatesNonEmptyGrid()
     {
         $this->board->setCell(0, 0, 1);
         $grid = $this->board->getGrid();
@@ -72,7 +72,7 @@ class BoardTest extends TestCase
     /**
      * @test
      */
-    public function setGridOutOfBoundCreatesNonEmptyGrid()
+    public function setCellOutOfBoundCreatesNonEmptyGrid()
     {
         $this->board->setCell(-1, 0, 1);
         $grid = $this->board->getGrid();
@@ -132,7 +132,7 @@ class BoardTest extends TestCase
     /**
      * @test
      */
-    public function nextGeneration()
+    public function fieldWithOscillatorCreatesNonEmptyWorldAfterNextGeneration()
     {
         $emptyBoard = new Board(5, 5);
 
@@ -142,6 +142,6 @@ class BoardTest extends TestCase
 
         $this->board->nextGeneration();
 
-        $this->assertNotTrue($this->board->compare($emptyBoard));
+        $this->assertTrue(!$this->board->compare($emptyBoard));
     }
 }

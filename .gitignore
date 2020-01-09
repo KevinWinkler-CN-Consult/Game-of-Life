@@ -6,3 +6,4 @@ Vagrantfile
 /.phpunit.result.cache
 /test/in/
 /test/out/
+/src/out/

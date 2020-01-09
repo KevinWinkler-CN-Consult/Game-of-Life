@@ -20,7 +20,10 @@ class VideoTest extends TestCase
         $this->output = new Video();
         $this->board = new Board(5, 5);
         $this->getopt = new GetOptMock();
-        exec("rm out/*");
+        foreach (glob("out/*") as $filename)
+        {
+            unlink($filename);
+        }
     }
 
     /**
@@ -93,7 +96,7 @@ class VideoTest extends TestCase
      */
     public function writeBoardWithHolidayColors()
     {
-        $this->output->setClock(new ClockMock("31-10"));
+        $this->output->overrideClock(new ClockMock("31-10"));
         $this->output->checkParameters($this->getopt);
         $this->board->setCell(0, 0, 1);
         $this->output->write($this->board);
@@ -116,7 +119,7 @@ class VideoTest extends TestCase
      */
     public function writeBoardWithNoHolidayColorsIfCustomColorIsSet()
     {
-        $this->output->setClock(new ClockMock("31-10"));
+        $this->output->overrideClock(new ClockMock("31-10"));
         $this->getopt->setOptions(["videoBackgroundColor" => "255,255,255", "videoCellColor" => "0,0,0"]);
         $this->output->checkParameters($this->getopt);
         $this->board->setCell(0, 0, 1);

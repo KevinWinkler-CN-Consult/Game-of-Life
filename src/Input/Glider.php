@@ -42,16 +42,13 @@ class Glider extends Input
 
     /**
      * Register all optional parameters of an Input, if any.
-     * @return array Array of options.
+     * @return Option[] Array of options.
      */
     public function register(): array
     {
-        $result = [];
-
-        $result[] = new Option(null, "gliderPosition", Getopt::REQUIRED_ARGUMENT);
-        end($result)->setDescription("Sets the position of the glider \"x,y\"");
-
-        return $result;
+        $gliderPositionOption = new Option(null, "gliderPosition", Getopt::REQUIRED_ARGUMENT);
+        $gliderPositionOption->setDescription("Sets the position of the glider \"x,y\"");
+        return [$gliderPositionOption];
     }
 
     /**
