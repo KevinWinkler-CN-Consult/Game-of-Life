@@ -1,13 +1,12 @@
 <?php
 
+use GetOpt\GetOpt;
 use GOL\Boards\Board;
-use GOL\Boards\history;
+use GOL\Boards\History;
 use GOL\Input\Input;
 use GOL\Output\Output;
-use Ulrichsg\Getopt;
 
-require_once "include.php";
-require_once "ulrichsg/getopt.php";
+require_once "../vendor/autoload.php";
 
 $maxIteration = 21;
 $version = "1.2";
@@ -42,41 +41,41 @@ $getOpt = new Getopt(
         [null, 'outputList', Getopt::NO_ARGUMENT, "Prints a list of all available output"]
     ]);
 
-foreach ($files = glob("input/*") as $file)
+foreach ($files = glob("Input/*") as $file)
 {
     $basename = basename($file, ".php");
     $classname = "\\GOL\\Input\\" . $basename;
 
-    if ($basename == "input")
+    if ($basename == "Input")
         continue;
 
     if (class_exists($classname))
     {
         $inputs[$basename] = new $classname;
-        end($inputs)->register($getOpt);
+        $getOpt->addOptions(end($inputs)->register());
     }
 }
 
-foreach ($files = glob("output/*") as $file)
+foreach ($files = glob("Output/*") as $file)
 {
     $basename = basename($file, ".php");
     $classname = "\\GOL\\Output\\" . $basename;
 
-    if ($basename == "output")
+    if ($basename == "Output")
         continue;
 
     if (class_exists($classname))
     {
         $outputs[$basename] = new $classname;
-        end($outputs)->register($getOpt);
+        $getOpt->addOptions(end($outputs)->register());
     }
 }
 
-$getOpt->parse();
+$getOpt->process();
 
 if ($getOpt->getOption('h'))
 {
-    $getOpt->showHelp();
+    echo $getOpt->getHelpText();
     die;
 }
 if ($getOpt->getOption('v'))
@@ -171,7 +170,7 @@ if ($output == null)
     die;
 }
 
-$history = new history($field);
+$history = new History($field);
 
 for ($i = 0; $i < $maxIteration; $i++)
 {
@@ -179,7 +178,7 @@ for ($i = 0; $i < $maxIteration; $i++)
     $field->nextGeneration();
 
     if ($history->stackSize() > $historyLength)
-        $history->pop();
+        $history->removeOldestBoard();
 
     if ($history->compare($field))
         break;

@@ -4,8 +4,9 @@ namespace GOL\Output;
 
 require_once "seasonal.php";
 
+use GetOpt\Getopt;
+use GetOpt\Option;
 use GOL\Boards\Board;
-use Ulrichsg\Getopt;
 
 /**
  * Saves the Board as a video.
@@ -36,8 +37,7 @@ class Video extends Output
      */
     public function flush(): void
     {
-        if (!is_dir("out/"))
-            mkdir("out/", 0755);
+        is_dir("out/") ? null : mkdir("out/", 0755);
 
         foreach ($this->buffer as $index => $board)
         {
@@ -63,7 +63,10 @@ class Video extends Output
         }
 
         exec("ffmpeg -framerate " . $this->fps . " -i out/img-%03d.png out/video.avi");
-        exec("rm out/img*");
+        foreach (glob("out/img*") as $filename)
+        {
+            unlink($filename);
+        }
 
         $this->buffer = [];
     }
@@ -82,7 +85,7 @@ class Video extends Output
         if ($this->cellSize <= 0)
             $this->cellSize = 1;
 
-        $seasonalColor = getHolidayColor();
+        $seasonalColor = getHolidayColor($this->clock);
 
         if (count($seasonalColor) == 6)
         {
@@ -124,18 +127,24 @@ class Video extends Output
     }
 
     /**
-     * Register all optional parameters the Output.
-     * @param Getopt $_getopt Option manager to add the options
+     * Register all optional parameters of an Input, if any.
+     * @return Option[] Array of options.
      */
-    public function register(Getopt $_getopt): void
+    public function register(): array
     {
-        $_getopt->addOptions(
-            [
-                [null, "videoFPS", Getopt::REQUIRED_ARGUMENT, "Sets the framerate of the video."],
-                [null, "videoCellColor", Getopt::REQUIRED_ARGUMENT, "Sets the color of living cells. 'r,g,b' 0-255."],
-                [null, "videoBackgroundColor", Getopt::REQUIRED_ARGUMENT, "Sets the background color. 'r,g,b' 0-255."],
-                [null, "videoCellSize", Getopt::REQUIRED_ARGUMENT, "Sets the size of the cells in pixel."]
-            ]);
+        $result[] = new Option(null, "videoFPS", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Sets the framerate of the video.");
+
+        $result[] = new Option(null, "videoCellColor", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Sets the color of living cells. 'r,g,b' 0-255.");
+
+        $result[] = new Option(null, "videoBackgroundColor", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Sets the background color. 'r,g,b' 0-255.");
+
+        $result[] = new Option(null, "videoCellSize", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Sets the size of the cells in pixel.");
+
+        return $result;
     }
 
     /**

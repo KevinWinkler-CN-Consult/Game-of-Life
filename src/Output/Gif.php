@@ -2,11 +2,13 @@
 
 namespace GOL\Output;
 
+use Exception;
+use GetOpt\Getopt;
+use GetOpt\Option;
 use GifCreator\AnimGif;
 use GOL\Boards\Board;
-use Ulrichsg\Getopt;
 
-require_once "animgif/AnimGif.php";
+require_once "seasonal.php";
 
 /**
  * Saves the board as a gif.
@@ -60,11 +62,14 @@ class Gif extends Output
         $animGif = new AnimGif();
         try
         {
-            $animGif->create("out/", 1);
+            $animGif->create("out/", $this->delay);
             $animGif->save("out/output.gif");
-            exec("rm out/img*");
+            foreach (glob("out/img*") as $filename)
+            {
+                unlink($filename);
+            }
         }
-        catch (\Exception $e)
+        catch (Exception $e)
         {
             echo $e->getMessage();
         }
@@ -76,15 +81,15 @@ class Gif extends Output
      */
     public function checkParameters(Getopt $_getopt): void
     {
-        $this->delay = $_getopt->getOption("gifDelay");
-        if ($this->delay <= 0.0)
+        $this->delay = intval($_getopt->getOption("gifDelay"));
+        if ($this->delay <= 0)
             $this->delay = 1;
 
         $this->cellSize = $_getopt->getOption("gifCellSize");
         if ($this->cellSize <= 0)
             $this->cellSize = 1;
 
-        $seasonalColor = getHolidayColor();
+        $seasonalColor = getHolidayColor($this->clock);
 
         if (count($seasonalColor) == 6)
         {
@@ -124,25 +129,28 @@ class Gif extends Output
             $this->backgroundColor[2] = 0;
         }
 
-        if (!is_dir("out/"))
-        {
-            mkdir("out/", 0755);
-        }
+        is_dir("out/") ? null : mkdir("out/", 0755);
     }
 
     /**
-     * Register all optional parameters the Output.
-     * @param Getopt $_getopt Option manager to add the options
+     * Register all optional parameters of an Input, if any.
+     * @return Option[] Array of options.
      */
-    public function register(Getopt $_getopt): void
+    public function register(): array
     {
-        $_getopt->addOptions(
-            [
-                [null, "gifDelay", Getopt::REQUIRED_ARGUMENT, "Sets the delay between frames (in 1/100s)."],
-                [null, "gifCellColor", Getopt::REQUIRED_ARGUMENT, "Sets the color of living cells. 'r,g,b' 0-255."],
-                [null, "gifBackgroundColor", Getopt::REQUIRED_ARGUMENT, "Sets the background color. 'r,g,b' 0-255."],
-                [null, "gifCellSize", Getopt::REQUIRED_ARGUMENT, "Sets the size of the cells in pixel."]
-            ]);
+        $result[] = new Option(null, "gifDelay", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Sets the delay between frames (in 1/100s).");
+
+        $result[] = new Option(null, "gifCellColor", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Sets the color of living cells. 'r,g,b' 0-255.");
+
+        $result[] = new Option(null, "gifBackgroundColor", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Sets the background color. 'r,g,b' 0-255.");
+
+        $result[] = new Option(null, "gifCellSize", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Sets the size of the cells in pixel.");
+
+        return $result;
     }
 
     /**

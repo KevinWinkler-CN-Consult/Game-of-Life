@@ -2,8 +2,9 @@
 
 namespace GOL\Input;
 
+use GetOpt\Getopt;
+use GetOpt\Option;
 use GOL\Boards\Board;
-use Ulrichsg\Getopt;
 
 /**
  * Fills the board with a specific pattern saved in the plaintext(.cells) format.
@@ -62,14 +63,13 @@ class Plaintext extends Input
 
     /**
      * Register all optional parameters of an Input, if any.
-     * @param Getopt $_getopt Option manager to add the options
+     * @return Option[] Array of options.
      */
-    public function register(Getopt $_getopt): void
+    public function register(): array
     {
-        $_getopt->addOptions(
-            [
-                [null, "plaintextFile", Getopt::REQUIRED_ARGUMENT, "Pattern to load"]
-            ]);
+        $plaintextLocationOption = new Option(null, "plaintextFile", Getopt::REQUIRED_ARGUMENT);
+        $plaintextLocationOption->setDescription("Pattern to load");
+        return [$plaintextLocationOption];
     }
 
     /**

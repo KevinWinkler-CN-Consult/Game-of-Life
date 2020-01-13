@@ -8,7 +8,7 @@ namespace GOL\Boards;
  * Use compare() to compare the current board with the previous versions.
  * Use push() to add the current board to the history and pop() to remove the oldest board.
  */
-class history
+class History
 {
     protected $previousBoards = [];
 
@@ -30,7 +30,7 @@ class history
     {
         foreach ($this->previousBoards as $previousBoard)
         {
-            if($_board->compare($previousBoard))
+            if ($_board->compare($previousBoard))
                 return true;
         }
         return false;
@@ -49,7 +49,7 @@ class history
     /**
      * Removes the oldest board from the history.
      */
-    public function pop()
+    public function removeOldestBoard()
     {
         array_pop($this->previousBoards);
     }

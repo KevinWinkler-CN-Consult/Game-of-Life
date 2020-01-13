@@ -4,8 +4,9 @@ namespace GOL\Output;
 
 require_once "seasonal.php";
 
+use GetOpt\Getopt;
+use GetOpt\Option;
 use GOL\Boards\Board;
-use Ulrichsg\Getopt;
 
 /**
  * Saves the Board as a png sequence.
@@ -13,7 +14,7 @@ use Ulrichsg\Getopt;
  * Use write() to write the Board data to the output.
  * and flush() to write it on the disc.
  */
-class PNG extends Output
+class Png extends Output
 {
     private $index = 0;
     private $cellSize = 1;
@@ -61,7 +62,7 @@ class PNG extends Output
         if ($this->cellSize <= 0)
             $this->cellSize = 1;
 
-        $seasonalColor = getHolidayColor();
+        $seasonalColor = getHolidayColor($this->clock);
 
         if (count($seasonalColor) == 6)
         {
@@ -101,22 +102,25 @@ class PNG extends Output
             $this->cellColor[2] = 255;
         }
 
-        if (!is_dir("out/"))
-            mkdir("out/", 0755);
+        is_dir("out/") ? null : mkdir("out/", 0755);
     }
 
     /**
-     * Register all optional parameters the Output.
-     * @param Getopt $_getopt Option manager to add the options
+     * Register all optional parameters of an Input, if any.
+     * @return Option[] Array of options.
      */
-    public function register(Getopt $_getopt): void
+    public function register(): array
     {
-        $_getopt->addOptions(
-            [
-                [null, "pngCellColor", Getopt::REQUIRED_ARGUMENT, "Sets the color of living cells. 'r,g,b' 0-255."],
-                [null, "pngBackgroundColor", Getopt::REQUIRED_ARGUMENT, "Sets the background color. 'r,g,b' 0-255."],
-                [null, "pngCellSize", Getopt::REQUIRED_ARGUMENT, "Sets the size of the cells in pixel."]
-            ]);
+        $result[] = new Option(null, "pngCellColor", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Sets the color of living cells. 'r,g,b' 0-255.");
+
+        $result[] = new Option(null, "pngBackgroundColor", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Sets the background color. 'r,g,b' 0-255.");
+
+        $result[] = new Option(null, "pngCellSize", Getopt::REQUIRED_ARGUMENT);
+        end($result)->setDescription("Sets the size of the cells in pixel.");
+
+        return $result;
     }
 
     /**

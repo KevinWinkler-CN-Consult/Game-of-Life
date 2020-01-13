@@ -2,9 +2,10 @@
 
 namespace GOL\Input;
 
+use GetOpt\Getopt;
 use GOL\Boards\Board;
+use GOL\Helper\Readline;
 use GOL\Output\Console;
-use Ulrichsg\Getopt;
 
 /**
  * User input
@@ -13,6 +14,8 @@ use Ulrichsg\Getopt;
  */
 class User extends Input
 {
+    private $readline = null;
+
     /**
      * Prepares a Board for usage.
      * @param Board $_board Board to prepare.
@@ -25,14 +28,15 @@ class User extends Input
             "(Enter \"finish\" to continue.)\n";
 
         $output = new Console();
+        $this->readline = $this->readline != null ? $this->readline : new Readline();
 
         while (true)
         {
             $output->write($_board);
-            $readline = readline("Cell >> ");
-            if ($readline == "finish")
+            $line = $this->readline->readline("Cell >> ");
+            if ($line == "finish")
                 break;
-            $coordinates = explode(",", $readline);
+            $coordinates = explode(",", $line);
 
             if (count($coordinates) == 3)
             {
@@ -48,19 +52,20 @@ class User extends Input
     }
 
     /**
-     * Register all optional parameters of an Input, if any.
-     * @param Getopt $_getopt Option manager to add the options
-     */
-    public function register(Getopt $_getopt): void
-    {
-    }
-
-    /**
      * Returns the description of the Input.
      * @return string description.
      */
     public function description(): string
     {
         return "Allows to set the state of specific cells.";
+    }
+
+    /**
+     * Changes the readline object for test purposes.
+     * @param Readline $readline readline object to use.
+     */
+    public function setReadline($readline): void
+    {
+        $this->readline = $readline;
     }
 }

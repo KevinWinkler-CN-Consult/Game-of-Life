@@ -2,8 +2,8 @@
 
 namespace GOL\Input;
 
+use GetOpt\Getopt;
 use GOL\Boards\Board;
-use Ulrichsg\Getopt;
 
 /**
  * Fills a board with the acorn pattern.

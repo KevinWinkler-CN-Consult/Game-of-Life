@@ -2,14 +2,16 @@
 
 namespace GOL\Input;
 
+use GetOpt\Getopt;
+use GetOpt\Option;
 use GOL\Boards\Board;
-use Ulrichsg\Getopt;
 
 /**
  * Baseclass for pluggable inputs.
  *
  * Implement prepareBoard() to fill a Board in a specific way
  * and register() to register optional arguments.
+ * @codeCoverageIgnore
  */
 abstract class Input
 {
@@ -22,10 +24,11 @@ abstract class Input
 
     /**
      * Register all optional parameters of an Input, if any.
-     * @param Getopt $_getopt Option manager to add the options
+     * @return Option[] Array of options.
      */
-    public function register(Getopt $_getopt): void
+    public function register(): array
     {
+        return [];
     }
 
     /**

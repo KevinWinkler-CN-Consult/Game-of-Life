@@ -2,17 +2,31 @@
 
 namespace GOL\Output;
 
+use GetOpt\Getopt;
+use GetOpt\Option;
 use GOL\Boards\Board;
-use Ulrichsg\Getopt;
+use GOL\Helper\Clock;
 
 /**
  * Base class for pluggable outputs.
  *
  * Implement write() to write the Board data to the output and
  * implement flush() to output the data.
+ * @codeCoverageIgnore
  */
 abstract class Output
 {
+    protected $clock;
+
+    /**
+     * @param Clock $_clock Clock object to use.
+     */
+    public function __construct( Clock $_clock = null )
+    {
+        $clock = $_clock ?? new Clock();
+        $this->clock = $clock;
+    }
+
     /**
      * Writes the current board to the Output.
      *
@@ -36,11 +50,12 @@ abstract class Output
     }
 
     /**
-     * Register all optional parameters of an Output, if any.
-     * @param Getopt $_getopt Option manager to add the options
+     * Register all optional parameters of an Input, if any.
+     * @return Option[] Array of options.
      */
-    public function register(Getopt $_getopt): void
+    public function register(): array
     {
+        return [];
     }
 
     /**
@@ -51,5 +66,14 @@ abstract class Output
     public function description(): string
     {
         return "";
+    }
+
+    /**
+     * Override the default clock with another.
+     * @param Clock $clock Clock to use.
+     */
+    public function overrideClock(Clock $clock)
+    {
+        $this->clock = $clock;
     }
 }
