@@ -3,7 +3,7 @@
 namespace GOL;
 
 use GOL\Boards\Board;
-use GOL\Output\Console;
+use GOL\Rules\StandardRule;
 use PHPUnit\Framework\TestCase;
 
 class GameLogicTest extends TestCase
@@ -15,7 +15,7 @@ class GameLogicTest extends TestCase
     {
         $board = new Board(4, 4);
         $ref = new Board(4, 4);
-        $gol = new GameLogic($board);
+        $gol = new GameLogic($board,new StandardRule());
 
         $gol->nextGeneration($board);
 
@@ -29,7 +29,7 @@ class GameLogicTest extends TestCase
     {
         $board = new Board(4, 4);
         $ref = new Board(4, 4);
-        $gol = new GameLogic($board);
+        $gol = new GameLogic($board,new StandardRule());
 
         $board->setCell(1, 1, 1);
         $board->setCell(1, 2, 1);
@@ -40,8 +40,7 @@ class GameLogicTest extends TestCase
         $ref->setCell(2, 2, 1);
 
         $gol->nextGeneration($board);
-        $out = new Console();
-        $out->write($board);
+
         $this->assertTrue($ref->compare($board));
     }
 
@@ -56,7 +55,7 @@ class GameLogicTest extends TestCase
         $board->setCell(1, 2, 1);
         $board->setCell(1, 3, 1);
 
-        $gol = new GameLogic($board);
+        $gol = new GameLogic($board,new StandardRule());
 
         $gol->nextGeneration($board);
         $gol->nextGeneration($board);
@@ -100,7 +99,7 @@ class GameLogicTest extends TestCase
 
         $board->setCell(4, 8, 1);
 
-        $gol = new GameLogic($board);
+        $gol = new GameLogic($board,new StandardRule());
         $gol->setHistoryLength(3);
 
         $gol->nextGeneration($board);
@@ -113,10 +112,10 @@ class GameLogicTest extends TestCase
     /**
      * @test
      */
-    public function historyPop()
+    public function historyDeletesToOldBoards()
     {
         $board = new Board(4, 4);
-        $gol = new GameLogic($board);
+        $gol = new GameLogic($board,new StandardRule());
 
         $gol->nextGeneration($board);
         $gol->nextGeneration($board);

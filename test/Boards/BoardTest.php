@@ -123,32 +123,6 @@ class BoardTest extends TestCase
     /**
      * @test
      */
-    public function emptyBoardYieldsEmptyBoardAfterNextGeneration()
-    {
-        $emptyBoard = new Board(5, 5);
-        $this->board->nextGeneration();
-        $this->assertTrue($this->board->compare($emptyBoard));
-    }
-
-    /**
-     * @test
-     */
-    public function fieldWithOscillatorCreatesNonEmptyWorldAfterNextGeneration()
-    {
-        $emptyBoard = new Board(5, 5);
-
-        $this->board->setCell(1, 1, 1);
-        $this->board->setCell(2, 1, 1);
-        $this->board->setCell(3, 1, 1);
-
-        $this->board->nextGeneration();
-
-        $this->assertTrue(!$this->board->compare($emptyBoard));
-    }
-
-    /**
-     * @test
-     */
     public function getEmptyCell()
     {
         $this->board->getCell(0, 0);

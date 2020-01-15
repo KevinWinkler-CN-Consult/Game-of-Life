@@ -2,10 +2,11 @@
 
 use GetOpt\GetOpt;
 use GOL\Boards\Board;
-use GOL\Boards\History;
 use GOL\GameLogic;
 use GOL\Input\Input;
 use GOL\Output\Output;
+use GOL\Rules\Rule;
+use GOL\Rules\StandardRule;
 
 require_once "../vendor/autoload.php";
 
@@ -20,11 +21,13 @@ $historyLength = 2;
  * @var Input $inputs
  * @var Output $output
  * @var Output $outputs
+ * @var Rule $rule
  */
 $field = null;
 $inputs = [];
 $output = null;
 $outputs = [];
+$rule = new StandardRule();
 
 $getOpt = new Getopt(
     [
@@ -171,7 +174,7 @@ if ($output == null)
     die;
 }
 
-$logic = new GameLogic($field);
+$logic = new GameLogic($field,$rule);
 
 for ($i = 0; $i < $maxIteration; $i++)
 {

@@ -33,63 +33,6 @@ class Board
     }
 
     /**
-     * Runs the Game of Life algorithm.
-     */
-    public function nextGeneration()
-    {
-        $buffer = $this->getGrid();
-
-        for ($y = 0; $y < $this->height(); $y++)
-        {
-            for ($x = 0; $x < $this->width(); $x++)
-            {
-                $cell = $this->getCell($x,$y);
-                $nextState = $this->applyRule($this->countLivingNeighbours($cell), $this->grid[$x+1][$y+1]->value());
-                $buffer[$x][$y] = $nextState;
-            }
-        }
-
-        for ($y = 0; $y < $this->height(); $y++)
-        {
-            for ($x = 0; $x < $this->width(); $x++)
-            {
-                $this->setCell($x, $y, $buffer[$x][$y]);
-            }
-        }
-
-    }
-
-    /**
-     * @param int $_numNeighbours Number of living cells in the neighbourhood.
-     * @param bool $_isAlive State of the current cell.
-     * @return int State of the cell in the next generation.
-     */
-    private function applyRule($_numNeighbours, $_isAlive)
-    {
-        $survival = [2, 3];
-        $birth = [3];
-
-        if ($_isAlive)
-        {
-            foreach ($survival as $s)
-            {
-                if ($_numNeighbours == $s)
-                    return 1;
-            }
-        }
-        else
-        {
-            foreach ($birth as $b)
-            {
-                if ($_numNeighbours == $b)
-                    return 1;
-            }
-        }
-
-        return 0;
-    }
-
-    /**
      * Returns the amount of living cells in the neighbourhood of a specific cell.
      *
      * No out of bound check due to the margin.
