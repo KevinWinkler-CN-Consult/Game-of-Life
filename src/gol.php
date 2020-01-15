@@ -18,16 +18,18 @@ $historyLength = 2;
 
 /**
  * @var Board $field
- * @var Input $inputs
+ * @var Input[] $inputs
  * @var Output $output
- * @var Output $outputs
+ * @var Output[] $outputs
  * @var Rule $rule
+ * @var Rule[] $rules
  */
 $field = null;
 $inputs = [];
 $output = null;
 $outputs = [];
-$rule = new StandardRule();
+$rule = null;
+$rules = [];
 
 $getOpt = new Getopt(
     [
@@ -42,7 +44,10 @@ $getOpt = new Getopt(
         [null, 'inputList', Getopt::NO_ARGUMENT, "Prints a list of all available inputs"],
 
         [null, 'output', Getopt::REQUIRED_ARGUMENT, "Specifies the output"],
-        [null, 'outputList', Getopt::NO_ARGUMENT, "Prints a list of all available output"]
+        [null, 'outputList', Getopt::NO_ARGUMENT, "Prints a list of all available output"],
+
+        [null, 'rule', Getopt::REQUIRED_ARGUMENT, "Specifies the rule"],
+        [null, 'ruleList', Getopt::NO_ARGUMENT, "Prints a list of all available rules"]
     ]);
 
 foreach ($files = glob("Input/*") as $file)
@@ -72,6 +77,21 @@ foreach ($files = glob("Output/*") as $file)
     {
         $outputs[$basename] = new $classname;
         $getOpt->addOptions(end($outputs)->register());
+    }
+}
+
+foreach ($files = glob("Rules/*") as $file)
+{
+    $basename = basename($file, ".php");
+    $classname = "\\GOL\\Rules\\" . $basename;
+
+    if ($basename == "Rule")
+        continue;
+
+    if (class_exists($classname))
+    {
+        $rules[$basename] = new $classname;
+        $getOpt->addOptions(end($rules)->register());
     }
 }
 
@@ -106,7 +126,15 @@ if ($getOpt->getOption("outputList"))
     }
     die;
 }
-
+if($getOpt->getOption("ruleList"))
+{
+    echo "Available rules\n";
+    foreach ($rules as $type => $out)
+    {
+        echo $type . " " . $out->description() . "\n";
+    }
+    die;
+}
 
 if ($getOpt->getOption('width'))
 {
@@ -166,6 +194,25 @@ if ($field == null)
     $field->setCell(0, 2, 1);
     $field->setCell(1, 2, 1);
     $field->setCell(2, 2, 1);
+}
+
+if ($getOpt->getOption("rule"))
+{
+    $arg = $getOpt->getOption("rule");
+
+    foreach ($rules as $type => $r)
+    {
+        if ($type == $arg)
+        {
+            $r->initialize($getOpt);
+            $rule = $r;
+            break;
+        }
+    }
+}
+else
+{
+    $rule = new StandardRule();
 }
 
 if ($output == null)
