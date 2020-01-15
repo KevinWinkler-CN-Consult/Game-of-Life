@@ -3,6 +3,7 @@
 use GetOpt\GetOpt;
 use GOL\Boards\Board;
 use GOL\Boards\History;
+use GOL\GameLogic;
 use GOL\Input\Input;
 use GOL\Output\Output;
 
@@ -170,20 +171,15 @@ if ($output == null)
     die;
 }
 
-$history = new History($field);
+$logic = new GameLogic($field);
 
 for ($i = 0; $i < $maxIteration; $i++)
 {
     $output->write($field);
-    $field->nextGeneration();
+    $logic->nextGeneration($field);
 
-    if ($history->stackSize() > $historyLength)
-        $history->removeOldestBoard();
-
-    if ($history->compare($field))
+    if ($logic->isLooping())
         break;
-
-    $history->push($field);
 }
 
 $output->flush();
