@@ -15,10 +15,10 @@ use GOL\Boards\Field;
 abstract class Rule
 {
     /**
-     * @param Field $field Cell to check.
+     * @param Field $_field Cell to check.
      * @return bool cells state in the next generation.
      */
-    abstract public function apply(Field $field): bool;
+    abstract public function apply(Field $_field): bool;
 
     /**
      * Register all optional parameters of an Input, if any.

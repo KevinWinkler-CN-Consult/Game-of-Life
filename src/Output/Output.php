@@ -70,10 +70,10 @@ abstract class Output
 
     /**
      * Override the default clock with another.
-     * @param Clock $clock Clock to use.
+     * @param Clock $_clock Clock to use.
      */
-    public function overrideClock(Clock $clock)
+    public function overrideClock(Clock $_clock)
     {
-        $this->clock = $clock;
+        $this->clock = $_clock;
     }
 }

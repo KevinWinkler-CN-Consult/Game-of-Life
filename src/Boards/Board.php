@@ -5,7 +5,7 @@ namespace GOL\Boards;
 /**
  * Represents a Game of Life world.
  *
- * Use countLivingNeighbours() to calculate the number of living neighbours and compare to compare two boards.
+ * Use countLivingNeighbours() to calculate the number of living neighbours and compare() to compare two boards.
  */
 class Board
 {
@@ -35,17 +35,15 @@ class Board
     /**
      * Returns the amount of living cells in the neighbourhood of a specific cell.
      *
-     * No out of bound check due to the margin.
-     *
      * @param Field $_field Field who's neighbours should be calculated.
-     * @return int amount of living cells and -1 if given cell is out of bounds.
+     * @return int Amount of living cells and -1 if given cell is out of bounds.
      */
     public function countLivingNeighbours(Field $_field)
     {
         $livingNeighbourCount = -1;
         $x = $_field->x();
         $y = $_field->y();
-        // out of bounds and margin check
+
         if (!$this->isOutOfBounds($x, $y))
         {
             $relativeNeighbourIndices = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
@@ -61,10 +59,10 @@ class Board
     }
 
     /**
-     * Compares the current board with the history.
+     * Compares the board with another board.
      *
      * @param Board $_board board to check.
-     * @return bool true if one of the previous boards is equal to to current board, false otherwise.
+     * @return bool true if both boards are equal, false otherwise.
      */
     public function compare(Board $_board)
     {

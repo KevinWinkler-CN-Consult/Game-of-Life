@@ -13,11 +13,11 @@ class History
     protected $previousBoards = [];
 
     /**
-     * @param Board $board First generation of the board.
+     * @param Board $_board First generation of the board.
      */
-    public function __construct(Board $board)
+    public function __construct(Board $_board)
     {
-        $this->push($board);
+        $this->push($_board);
     }
 
     /**
