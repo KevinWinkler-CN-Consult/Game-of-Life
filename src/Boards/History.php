@@ -38,11 +38,20 @@ class History
 
     /**
      * Adds the board to the history.
-     * @param Board $board board to add.
+     * @param Board $_board board to add.
      */
-    public function push(Board $board)
+    public function push(Board $_board)
     {
-        $temp = clone $board;
+        $temp = new Board($_board->width(), $_board->height());
+
+        for ($y = 0; $y < $_board->height(); $y++)
+        {
+            for ($x = 0; $x < $_board->width(); $x++)
+            {
+                $temp->setCell($x, $y, $_board->getCell($x, $y)->value());
+            }
+        }
+
         array_unshift($this->previousBoards, $temp);
     }
 

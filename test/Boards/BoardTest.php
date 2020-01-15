@@ -3,6 +3,7 @@
 namespace Boards;
 
 use GOL\Boards\Board;
+use GOL\Boards\Field;
 use PHPUnit\Framework\TestCase;
 
 class BoardTest extends TestCase
@@ -143,5 +144,44 @@ class BoardTest extends TestCase
         $this->board->nextGeneration();
 
         $this->assertTrue(!$this->board->compare($emptyBoard));
+    }
+
+    /**
+     * @test
+     */
+    public function getEmptyCell()
+    {
+        $this->board->getCell(0, 0);
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @test
+     */
+    public function getOutOfBoundsCellReturnsNull()
+    {
+        $this->assertNull($this->board->getCell(-1, -1));
+        $this->assertNull($this->board->getCell(10, 10));
+    }
+
+    /**
+     * @test
+     */
+    public function getNeighbours()
+    {
+        $this->board->setCell(0, 0, 1);
+        $cell = $this->board->getCell(1, 1);
+
+        $this->assertEquals(1, $this->board->countLivingNeighbours($cell));
+    }
+
+    /**
+     * @test
+     */
+    public function getNeighboursOfAnOutOfBoundsCell()
+    {
+        $cell = new Field($this->board, -1, -1);
+
+        $this->assertEquals(-1, $this->board->countLivingNeighbours($cell));
     }
 }

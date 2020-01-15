@@ -5,7 +5,7 @@ namespace GOL\Boards;
 /**
  * Represents a Game of Life world.
  *
- * Use print() to print the board and nextGeneration() to calculate the next generation.
+ * Use countLivingNeighbours() to calculate the number of living neighbours and compare to compare two boards.
  */
 class Board
 {
@@ -27,7 +27,7 @@ class Board
         {
             for ($x = 0; $x < $_width + 2; $x++)
             {
-                $this->grid[$x][$y] = 0;
+                $this->grid[$x][$y] = new Field($this, $x - 1, $y - 1);
             }
         }
     }
@@ -37,17 +37,26 @@ class Board
      */
     public function nextGeneration()
     {
-        $buffer = $this->grid;
+        $buffer = $this->getGrid();
 
-        for ($y = 1; $y < $this->height + 1; $y++)
+        for ($y = 0; $y < $this->height(); $y++)
         {
-            for ($x = 1; $x < $this->width + 1; $x++)
+            for ($x = 0; $x < $this->width(); $x++)
             {
-                $buffer[$x][$y] = $this->applyRule($this->countLivingNeighbours($x, $y), $this->grid[$x][$y]);
+                $cell = $this->getCell($x,$y);
+                $nextState = $this->applyRule($this->countLivingNeighbours($cell), $this->grid[$x+1][$y+1]->value());
+                $buffer[$x][$y] = $nextState;
             }
         }
 
-        $this->grid = $buffer;
+        for ($y = 0; $y < $this->height(); $y++)
+        {
+            for ($x = 0; $x < $this->width(); $x++)
+            {
+                $this->setCell($x, $y, $buffer[$x][$y]);
+            }
+        }
+
     }
 
     /**
@@ -85,22 +94,23 @@ class Board
      *
      * No out of bound check due to the margin.
      *
-     * @param int $_x y coordinate of the specific cell.
-     * @param int $_y y coordinate of the specific cell.
+     * @param Field $_field Field who's neighbours should be calculated.
      * @return int amount of living cells and -1 if given cell is out of bounds.
      */
-    private function countLivingNeighbours($_x, $_y)
+    public function countLivingNeighbours(Field $_field)
     {
         $livingNeighbourCount = -1;
+        $x = $_field->x();
+        $y = $_field->y();
         // out of bounds and margin check
-        if ($_x >= 1 and $_y >= 1 and $_x < $this->width and $_y < $this->height)
+        if (!$this->isOutOfBounds($x, $y))
         {
             $relativeNeighbourIndices = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
             $livingNeighbourCount++;
 
             foreach ($relativeNeighbourIndices as $relativeNeighbour)
             {
-                if ($this->grid[$_x + $relativeNeighbour[0]][$_y + $relativeNeighbour[1]] == 1)
+                if ($this->grid[$x + $relativeNeighbour[0] + 1][$y + $relativeNeighbour[1] + 1]->value() == 1)
                     $livingNeighbourCount++;
             }
         }
@@ -124,7 +134,7 @@ class Board
         {
             for ($x = 1; $x < $_board->width() + 1; $x++)
             {
-                if ($this->grid[$x][$y] != $_board->grid[$x][$y])
+                if ($this->grid[$x][$y]->value() != $_board->getCell($x - 1, $y - 1)->value())
                     $equal = false;
             }
         }
@@ -140,10 +150,24 @@ class Board
      */
     public function setCell($_x, $_y, $_value)
     {
-        if ($_x < 0 || $_y < 0 || $_x >= $this->width || $_y >= $this->height)
+        if ($this->isOutOfBounds($_x, $_y))
             return;
 
-        $this->grid[$_x + 1][$_y + 1] = $_value;
+        $this->grid[$_x + 1][$_y + 1]->setValue($_value);
+    }
+
+    /**
+     * Returns a cell at the given point.
+     * @param int $_x X position of the cell.
+     * @param int $_y Y position of the cell.
+     * @return Field|null The cell or null pointer on invalid coordinates.
+     */
+    public function getCell(int $_x, int $_y): ?Field
+    {
+        if ($this->isOutOfBounds($_x, $_y))
+            return null;
+
+        return $this->grid[$_x + 1][$_y + 1];
     }
 
     /**
@@ -158,7 +182,7 @@ class Board
         {
             for ($x = 1; $x < $this->width + 1; $x++)
             {
-                $result[$x - 1][$y - 1] = $this->grid[$x][$y];
+                $result[$x - 1][$y - 1] = $this->grid[$x][$y]->value();
             }
         }
 
@@ -181,5 +205,16 @@ class Board
     public function height()
     {
         return $this->height;
+    }
+
+    /**
+     * Checks if a coordinate is out of bounds.
+     * @param int $_x X position to check.
+     * @param int $_y Y position to check.
+     * @return bool True on out of bounds, otherwise false.
+     */
+    private function isOutOfBounds(int $_x, int $_y): bool
+    {
+        return $_x < 0 || $_y < 0 || $_x >= $this->width || $_y >= $this->height;
     }
 }
