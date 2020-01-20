@@ -2,10 +2,10 @@
 
 namespace Output;
 
-use ClockMock;
+use GetOpt\GetOpt;
 use GetOpt\Option;
-use GetOptMock;
 use GOL\Boards\Board;
+use GOL\Helper\Clock;
 use GOL\Output\Video;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +19,7 @@ class VideoTest extends TestCase
     {
         $this->output = new Video();
         $this->board = new Board(5, 5);
-        $this->getopt = new GetOptMock();
+        $this->getopt = $this->createMock(GetOpt::class);
         foreach (glob("out/*") as $filename)
         {
             unlink($filename);
@@ -73,7 +73,8 @@ class VideoTest extends TestCase
      */
     public function writeBoardWithDifferentColors()
     {
-        $this->getopt->setOptions(["videoBackgroundColor" => "255,255,255", "videoCellColor" => "0,0,0"]);
+        $this->getopt->method("getOption")
+                     ->willReturnMap([["videoBackgroundColor", false, "255,255,255"], ["videoCellColor", false, "0,0,0"]]);
         $this->output->checkParameters($this->getopt);
         $this->board->setCell(0, 0, 1);
         $this->output->write($this->board);
@@ -96,7 +97,9 @@ class VideoTest extends TestCase
      */
     public function writeBoardWithHolidayColors()
     {
-        $this->output->overrideClock(new ClockMock("31-10"));
+        $clock = $this->createMock(Clock::class);
+        $clock->method("date")->willReturn("31-10");
+        $this->output->overrideClock($clock);
         $this->output->checkParameters($this->getopt);
         $this->board->setCell(0, 0, 1);
         $this->output->write($this->board);
@@ -119,8 +122,11 @@ class VideoTest extends TestCase
      */
     public function writeBoardWithNoHolidayColorsIfCustomColorIsSet()
     {
-        $this->output->overrideClock(new ClockMock("31-10"));
-        $this->getopt->setOptions(["videoBackgroundColor" => "255,255,255", "videoCellColor" => "0,0,0"]);
+        $clock = $this->createMock(Clock::class);
+        $clock->method("date")->willReturn("31-10");
+        $this->output->overrideClock($clock);
+        $this->getopt->method("getOption")
+                     ->willReturnMap([["videoBackgroundColor", false, "255,255,255"], ["videoCellColor", false, "0,0,0"]]);
         $this->output->checkParameters($this->getopt);
         $this->board->setCell(0, 0, 1);
         $this->output->write($this->board);
@@ -143,7 +149,8 @@ class VideoTest extends TestCase
      */
     public function writeBoardWithDifferentCellSize()
     {
-        $this->getopt->setOptions(["videoCellSize" => "2"]);
+        $this->getopt->method("getOption")
+                     ->willReturnMap([["videoCellSize", false, "2"]]);
         $this->output->checkParameters($this->getopt);
         $this->board->setCell(0, 0, 1);
         $this->output->write($this->board);

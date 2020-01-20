@@ -10,6 +10,8 @@
     "phpunit/phpunit": "8.4.3",
     "ulrichsg/getopt-php": "3.2.2",
     "ext-gd": "*",
-    "ext-readline": "*"
+    "ext-readline": "*",
+    "icecave/isolator": "3.0.3",
+    "shyru/timedilation": "0.1.1"
   }
 }

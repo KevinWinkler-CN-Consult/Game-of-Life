@@ -2,11 +2,11 @@
 
 namespace Output;
 
-use ClockMock;
+use GetOpt\GetOpt;
 use GetOpt\Option;
-use GetOptMock;
 use GifCreator\AnimGif;
 use GOL\Boards\Board;
+use GOL\Helper\Clock;
 use GOL\Output\Gif;
 use PHPUnit\Framework\TestCase;
 
@@ -21,7 +21,7 @@ class GifTest extends TestCase
     {
         $this->output = new Gif();
         $this->board = new Board(5, 5);
-        $this->getopt = new GetOptMock();
+        $this->getopt = $this->createMock(GetOpt::class);
         $this->animGif = new AnimGif();
         foreach (glob("out/*") as $filename)
         {
@@ -77,7 +77,8 @@ class GifTest extends TestCase
      */
     public function writeBoardWithDifferentColor()
     {
-        $this->getopt->setOptions(["gifBackgroundColor" => "255,255,255", "gifCellColor" => "0,0,0"]);
+        $this->getopt->method("getOption")
+                     ->willReturnMap([["gifBackgroundColor", false, "255,255,255"], ["gifCellColor", false, "0,0,0"]]);
         $this->output->checkParameters($this->getopt);
         $this->output->write($this->board);
         $this->board->setCell(0, 0, 1);
@@ -101,7 +102,9 @@ class GifTest extends TestCase
      */
     public function writeBoardWithHolidayColors()
     {
-        $this->output->overrideClock(new ClockMock("31-10"));
+        $clock = $this->createMock(Clock::class);
+        $clock->method("date")->willReturn("31-10");
+        $this->output->overrideClock($clock);
         $this->output->checkParameters($this->getopt);
         $this->output->write($this->board);
         $this->board->setCell(0, 0, 1);
@@ -125,9 +128,12 @@ class GifTest extends TestCase
      */
     public function writeBoardWithNoHolidayColorsIfCustomColorIsSet()
     {
-        $this->getopt->setOptions(["gifBackgroundColor" => "255,255,255", "gifCellColor" => "0,0,0"]);
-        $this->output->overrideClock(new ClockMock("31-10"));
+        $this->getopt->method("getOption")
+                     ->willReturnMap([["gifBackgroundColor", false, "255,255,255"], ["gifCellColor", false, "0,0,0"]]);
         $this->output->checkParameters($this->getopt);
+        $clock = $this->createMock(Clock::class);
+        $clock->method("date")->willReturn("31-10");
+        $this->output->overrideClock($clock);
         $this->output->write($this->board);
         $this->board->setCell(0, 0, 1);
         $this->output->write($this->board);
@@ -150,7 +156,8 @@ class GifTest extends TestCase
      */
     public function writeBoardWithDifferentCellSize()
     {
-        $this->getopt->setOptions(["gifCellSize" => "2"]);
+        $this->getopt->method("getOption")
+                     ->willReturnMap([["gifCellSize", false, "2"]]);
         $this->output->checkParameters($this->getopt);
         $this->output->write($this->board);
         $this->board->setCell(0, 0, 1);
@@ -177,7 +184,8 @@ class GifTest extends TestCase
      */
     public function writeBoardWithDifferentDelay()
     {
-        $this->getopt->setOptions(["gifDelay" => "2"]);
+        $this->getopt->method("getOption")
+                     ->willReturnMap([["gifDelay", false, "2"]]);
         $this->output->checkParameters($this->getopt);
         $this->output->write($this->board);
         $this->output->write($this->board);
@@ -198,7 +206,8 @@ class GifTest extends TestCase
      */
     public function writeBoardWithDifferentDelay3()
     {
-        $this->getopt->setOptions(["gifDelay" => "2"]);
+        $this->getopt->method("getOption")
+                     ->willReturnMap([["gifDelay", false, "2"]]);
         $this->output->checkParameters($this->getopt);
         $this->output->write($this->board);
         $this->output->flush();
