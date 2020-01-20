@@ -7,8 +7,7 @@ use GetOpt\Getopt;
 use GetOpt\Option;
 use GifCreator\AnimGif;
 use GOL\Boards\Board;
-
-require_once "seasonal.php";
+use GOL\Seasonal;
 
 /**
  * Saves the board as a gif.
@@ -89,7 +88,7 @@ class Gif extends Output
         if ($this->cellSize <= 0)
             $this->cellSize = 1;
 
-        $seasonalColor = getHolidayColor($this->clock);
+        $seasonalColor = Seasonal::getHolidayColor();
 
         if (count($seasonalColor) == 6)
         {

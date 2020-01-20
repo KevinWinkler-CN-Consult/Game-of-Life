@@ -6,8 +6,8 @@ use GetOpt\GetOpt;
 use GetOpt\Option;
 use GifCreator\AnimGif;
 use GOL\Boards\Board;
-use GOL\Helper\Clock;
 use GOL\Output\Gif;
+use phpmock\phpunit\PHPMock;
 use PHPUnit\Framework\TestCase;
 
 class GifTest extends TestCase
@@ -16,9 +16,13 @@ class GifTest extends TestCase
     protected $board;
     protected $getopt;
     protected $animGif;
+    protected $time;
+
+    use PHPMock;
 
     protected function setUp(): void
     {
+        $this->time = $this->getFunctionMock("GOL","date");
         $this->output = new Gif();
         $this->board = new Board(5, 5);
         $this->getopt = $this->createMock(GetOpt::class);
@@ -102,9 +106,7 @@ class GifTest extends TestCase
      */
     public function writeBoardWithHolidayColors()
     {
-        $clock = $this->createMock(Clock::class);
-        $clock->method("date")->willReturn("31-10");
-        $this->output->overrideClock($clock);
+        $this->time->expects($this->any())->willReturn("31-10");
         $this->output->checkParameters($this->getopt);
         $this->output->write($this->board);
         $this->board->setCell(0, 0, 1);
@@ -130,10 +132,8 @@ class GifTest extends TestCase
     {
         $this->getopt->method("getOption")
                      ->willReturnMap([["gifBackgroundColor", false, "255,255,255"], ["gifCellColor", false, "0,0,0"]]);
+        $this->time->expects($this->any())->willReturn("31-10");
         $this->output->checkParameters($this->getopt);
-        $clock = $this->createMock(Clock::class);
-        $clock->method("date")->willReturn("31-10");
-        $this->output->overrideClock($clock);
         $this->output->write($this->board);
         $this->board->setCell(0, 0, 1);
         $this->output->write($this->board);

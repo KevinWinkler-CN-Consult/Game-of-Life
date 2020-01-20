@@ -1,20 +1,18 @@
 <?php
 
-use GOL\Helper\Clock;
+namespace GOL;
 
-/**
- * Returns a holiday color. A background and a foreground color.
- * @param Clock $_clock the clock device to use.
- * @return array of 6 integers 2x rgb if today is a holiday , otherwise an empty array.
- */
-function getHolidayColor($_clock = null): array
+class Seasonal
 {
-    $clock = $_clock ?? new Clock();
+    public static function getHolidayColor()
+    {
+        $date = date("d-m");
 
-    if ($clock->date("d-m") == "31-10")
-    { // halloween
-        return [0, 0, 0, 255, 153, 0];
+        if ($date == "31-10")
+        { // halloween
+            return [0, 0, 0, 255, 153, 0];
+        }
+
+        return [];
     }
-
-    return [];
 }
