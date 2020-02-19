@@ -24,4 +24,14 @@ class MazeWithMiceRule extends Rule
 
         return $_field->value() ? $survive[$numberOfLivingNeighbors] : $born[$numberOfLivingNeighbors];
     }
+
+    /**
+     * Returns the description of the Rule.
+     * This is used to list all rules if the argument ruleList is set.
+     * @return string description.
+     */
+    public function description(): string
+    {
+        return "Like maze with mice moving in it.";
+    }
 }
