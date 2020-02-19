@@ -40,7 +40,7 @@ abstract class Rule
     }
 
     /**
-     * Register all optional parameters of an Input, if any.
+     * Register all optional parameters of a Rule, if any.
      * @param GetOpt $getOpt Option manager.
      */
     public function initialize(GetOpt $getOpt)

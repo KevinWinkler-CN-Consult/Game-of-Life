@@ -4,8 +4,16 @@ namespace GOL\Rules;
 
 use GOL\Boards\Field;
 
+/**
+ * The standard rule of game of life.
+ * Use apply() to apply the rule on a field.
+ */
 class StandardRule extends Rule
 {
+    /**
+     * @param Field $_field Cell to check.
+     * @return bool cells state in the next generation.
+     */
     public function apply(Field $_field): bool
     {
         $survive = [0, 0, 1, 1, 0, 0, 0, 0, 0];

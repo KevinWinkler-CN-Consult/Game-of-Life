@@ -8,7 +8,7 @@ use GOL\Rules\Rule;
 
 /**
  * Controls the game logic of the game.
- * Use nextGeneration to calculate the next generation.
+ * Use nextGeneration() to calculate the next generation.
  */
 class GameLogic
 {

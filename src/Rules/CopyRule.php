@@ -5,8 +5,16 @@ namespace GOL\Rules;
 
 use GOL\Boards\Field;
 
+/**
+ * This rule replicates a pattern after a period of time.
+ * Use apply() to apply the rule on a field.
+ */
 class CopyRule extends Rule
 {
+    /**
+     * @param Field $_field Cell to check.
+     * @return bool cells state in the next generation.
+     */
     public function apply(Field $_field): bool
     {
         $survive = [0, 1, 0, 1, 0, 1, 0, 1, 0];
