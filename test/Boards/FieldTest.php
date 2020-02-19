@@ -72,10 +72,10 @@ class FieldTest extends TestCase
     public function numberLivingNeighbours2()
     {
         $board = new Board(4, 4);
-        $board->setCell(0, 0, true);
-        $board->setCell(2, 2, true);
+        $board->setFieldValue(0, 0, true);
+        $board->setFieldValue(2, 2, true);
 
-        $num = $board->getCell(1, 1)->numberOfLivingNeighbors();
+        $num = $board->field(1, 1)->numberOfLivingNeighbors();
 
         $this->assertEquals(2, $num);
     }
@@ -100,10 +100,10 @@ class FieldTest extends TestCase
     public function numberDeadNeighbours2()
     {
         $board = new Board(4, 4);
-        $board->setCell(0, 0, true);
-        $board->setCell(2, 2, true);
+        $board->setFieldValue(0, 0, true);
+        $board->setFieldValue(2, 2, true);
 
-        $num = $board->getCell(1, 1)->numberOfDeadNeighbors();
+        $num = $board->field(1, 1)->numberOfDeadNeighbors();
 
         $this->assertEquals(6, $num);
     }

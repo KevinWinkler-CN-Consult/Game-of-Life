@@ -187,13 +187,13 @@ if ($field == null)
 {
     $field = new Board($width, $height);
 
-    $field->setCell(1, 0, 1);
+    $field->setFieldValue(1, 0, 1);
 
-    $field->setCell(2, 1, 1);
+    $field->setFieldValue(2, 1, 1);
 
-    $field->setCell(0, 2, 1);
-    $field->setCell(1, 2, 1);
-    $field->setCell(2, 2, 1);
+    $field->setFieldValue(0, 2, 1);
+    $field->setFieldValue(1, 2, 1);
+    $field->setFieldValue(2, 2, 1);
 }
 
 if ($getOpt->getOption("rule"))

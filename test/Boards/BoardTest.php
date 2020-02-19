@@ -62,7 +62,7 @@ class BoardTest extends TestCase
      */
     public function setCellCreatesNonEmptyGrid()
     {
-        $this->board->setCell(0, 0, 1);
+        $this->board->setFieldValue(0, 0, 1);
         $grid = $this->board->getGrid();
 
         $isEmpty = $this->isGridZero($grid);
@@ -75,7 +75,7 @@ class BoardTest extends TestCase
      */
     public function setCellOutOfBoundCreatesNonEmptyGrid()
     {
-        $this->board->setCell(-1, 0, 1);
+        $this->board->setFieldValue(-1, 0, 1);
         $grid = $this->board->getGrid();
 
         $isEmpty = $this->isGridZero($grid);
@@ -98,7 +98,7 @@ class BoardTest extends TestCase
     public function compareNotEqualBoardsReturnsTrue()
     {
         $nonEmptyBoard = new Board(5, 5);
-        $nonEmptyBoard->setCell(0, 0, 1);
+        $nonEmptyBoard->setFieldValue(0, 0, 1);
         $this->assertNotTrue($this->board->compare($nonEmptyBoard));
     }
 
@@ -125,7 +125,7 @@ class BoardTest extends TestCase
      */
     public function getEmptyCell()
     {
-        $this->board->getCell(0, 0);
+        $this->board->field(0, 0);
         $this->assertTrue(true);
     }
 
@@ -134,8 +134,8 @@ class BoardTest extends TestCase
      */
     public function getOutOfBoundsCellReturnsNull()
     {
-        $this->assertNull($this->board->getCell(-1, -1));
-        $this->assertNull($this->board->getCell(10, 10));
+        $this->assertNull($this->board->field(-1, -1));
+        $this->assertNull($this->board->field(10, 10));
     }
 
     /**
@@ -143,8 +143,8 @@ class BoardTest extends TestCase
      */
     public function getNeighbours()
     {
-        $this->board->setCell(0, 0, 1);
-        $cell = $this->board->getCell(1, 1);
+        $this->board->setFieldValue(0, 0, 1);
+        $cell = $this->board->field(1, 1);
 
         $this->assertEquals(1, $this->board->countLivingNeighbours($cell));
     }

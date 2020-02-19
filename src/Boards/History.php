@@ -48,7 +48,7 @@ class History
         {
             for ($x = 0; $x < $_board->width(); $x++)
             {
-                $temp->setCell($x, $y, $_board->getCell($x, $y)->value());
+                $temp->setFieldValue($x, $y, $_board->field($x, $y)->value());
             }
         }
 

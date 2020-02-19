@@ -16,7 +16,7 @@ class MazeWithMiceRuleTest extends TestCase
         $board = new Board(4, 4);
         $rule = new MazeWithMiceRule();
 
-        $newValue = $rule->apply($board->getCell(1, 1));
+        $newValue = $rule->apply($board->field(1, 1));
         $this->assertFalse($newValue);
     }
 
@@ -28,9 +28,9 @@ class MazeWithMiceRuleTest extends TestCase
         $board = new Board(4, 4);
         $rule = new MazeWithMiceRule();
 
-        $board->setCell(1, 1, true);
+        $board->setFieldValue(1, 1, true);
 
-        $newValue = $rule->apply($board->getCell(1, 1));
+        $newValue = $rule->apply($board->field(1, 1));
         $this->assertFalse($newValue);
     }
 
@@ -42,11 +42,11 @@ class MazeWithMiceRuleTest extends TestCase
         $board = new Board(4, 4);
         $rule = new MazeWithMiceRule();
 
-        $board->setCell(1, 1, true);
+        $board->setFieldValue(1, 1, true);
 
-        $board->setCell(0, 0, true);
+        $board->setFieldValue(0, 0, true);
 
-        $newValue = $rule->apply($board->getCell(1, 1));
+        $newValue = $rule->apply($board->field(1, 1));
         $this->assertTrue($newValue);
     }
 
@@ -58,12 +58,12 @@ class MazeWithMiceRuleTest extends TestCase
         $board = new Board(4, 4);
         $rule = new MazeWithMiceRule();
 
-        $board->setCell(1, 1, true);
+        $board->setFieldValue(1, 1, true);
 
-        $board->setCell(0, 0, true);
-        $board->setCell(0, 1, true);
+        $board->setFieldValue(0, 0, true);
+        $board->setFieldValue(0, 1, true);
 
-        $newValue = $rule->apply($board->getCell(1, 1));
+        $newValue = $rule->apply($board->field(1, 1));
         $this->assertTrue($newValue);
     }
 
@@ -75,13 +75,13 @@ class MazeWithMiceRuleTest extends TestCase
         $board = new Board(4, 4);
         $rule = new MazeWithMiceRule();
 
-        $board->setCell(1, 1, true);
+        $board->setFieldValue(1, 1, true);
 
-        $board->setCell(0, 0, true);
-        $board->setCell(0, 1, true);
-        $board->setCell(1, 0, true);
+        $board->setFieldValue(0, 0, true);
+        $board->setFieldValue(0, 1, true);
+        $board->setFieldValue(1, 0, true);
 
-        $newValue = $rule->apply($board->getCell(1, 1));
+        $newValue = $rule->apply($board->field(1, 1));
         $this->assertTrue($newValue);
     }
 
@@ -93,14 +93,14 @@ class MazeWithMiceRuleTest extends TestCase
         $board = new Board(4, 4);
         $rule = new MazeWithMiceRule();
 
-        $board->setCell(1, 1, true);
+        $board->setFieldValue(1, 1, true);
 
-        $board->setCell(0, 0, true);
-        $board->setCell(0, 1, true);
-        $board->setCell(1, 0, true);
-        $board->setCell(2, 0, true);
+        $board->setFieldValue(0, 0, true);
+        $board->setFieldValue(0, 1, true);
+        $board->setFieldValue(1, 0, true);
+        $board->setFieldValue(2, 0, true);
 
-        $newValue = $rule->apply($board->getCell(1, 1));
+        $newValue = $rule->apply($board->field(1, 1));
         $this->assertTrue($newValue);
     }
 
@@ -112,15 +112,15 @@ class MazeWithMiceRuleTest extends TestCase
         $board = new Board(4, 4);
         $rule = new MazeWithMiceRule();
 
-        $board->setCell(1, 1, true);
+        $board->setFieldValue(1, 1, true);
 
-        $board->setCell(0, 0, true);
-        $board->setCell(0, 1, true);
-        $board->setCell(1, 0, true);
-        $board->setCell(2, 0, true);
-        $board->setCell(0, 2, true);
+        $board->setFieldValue(0, 0, true);
+        $board->setFieldValue(0, 1, true);
+        $board->setFieldValue(1, 0, true);
+        $board->setFieldValue(2, 0, true);
+        $board->setFieldValue(0, 2, true);
 
-        $newValue = $rule->apply($board->getCell(1, 1));
+        $newValue = $rule->apply($board->field(1, 1));
         $this->assertTrue($newValue);
     }
 
@@ -132,11 +132,11 @@ class MazeWithMiceRuleTest extends TestCase
         $board = new Board(4, 4);
         $rule = new MazeWithMiceRule();
 
-        $board->setCell(0, 0, true);
-        $board->setCell(0, 1, true);
-        $board->setCell(1, 0, true);
+        $board->setFieldValue(0, 0, true);
+        $board->setFieldValue(0, 1, true);
+        $board->setFieldValue(1, 0, true);
 
-        $newValue = $rule->apply($board->getCell(1, 1));
+        $newValue = $rule->apply($board->field(1, 1));
         $this->assertTrue($newValue);
     }
 
@@ -148,15 +148,15 @@ class MazeWithMiceRuleTest extends TestCase
         $board = new Board(4, 4);
         $rule = new MazeWithMiceRule();
 
-        $board->setCell(0, 0, true);
-        $board->setCell(0, 1, true);
-        $board->setCell(1, 0, true);
-        $board->setCell(2, 0, true);
-        $board->setCell(0, 2, true);
-        $board->setCell(2, 1, true);
-        $board->setCell(1, 2, true);
+        $board->setFieldValue(0, 0, true);
+        $board->setFieldValue(0, 1, true);
+        $board->setFieldValue(1, 0, true);
+        $board->setFieldValue(2, 0, true);
+        $board->setFieldValue(0, 2, true);
+        $board->setFieldValue(2, 1, true);
+        $board->setFieldValue(1, 2, true);
 
-        $newValue = $rule->apply($board->getCell(1, 1));
+        $newValue = $rule->apply($board->field(1, 1));
         $this->assertTrue($newValue);
     }
 }

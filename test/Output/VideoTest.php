@@ -56,7 +56,7 @@ class VideoTest extends TestCase
     public function writeBoard()
     {
         $this->output->checkParameters($this->getopt);
-        $this->board->setCell(0, 0, 1);
+        $this->board->setFieldValue(0, 0, 1);
         $this->output->write($this->board);
         $this->output->flush();
 
@@ -80,7 +80,7 @@ class VideoTest extends TestCase
         $this->getopt->method("getOption")
                      ->willReturnMap([["videoBackgroundColor", false, "255,255,255"], ["videoCellColor", false, "0,0,0"]]);
         $this->output->checkParameters($this->getopt);
-        $this->board->setCell(0, 0, 1);
+        $this->board->setFieldValue(0, 0, 1);
         $this->output->write($this->board);
         $this->output->flush();
 
@@ -103,7 +103,7 @@ class VideoTest extends TestCase
     {
         $this->time->expects($this->any())->willReturn("31-10");
         $this->output->checkParameters($this->getopt);
-        $this->board->setCell(0, 0, 1);
+        $this->board->setFieldValue(0, 0, 1);
         $this->output->write($this->board);
         $this->output->flush();
 
@@ -128,7 +128,7 @@ class VideoTest extends TestCase
         $this->getopt->method("getOption")
                      ->willReturnMap([["videoBackgroundColor", false, "255,255,255"], ["videoCellColor", false, "0,0,0"]]);
         $this->output->checkParameters($this->getopt);
-        $this->board->setCell(0, 0, 1);
+        $this->board->setFieldValue(0, 0, 1);
         $this->output->write($this->board);
         $this->output->flush();
 
@@ -152,7 +152,7 @@ class VideoTest extends TestCase
         $this->getopt->method("getOption")
                      ->willReturnMap([["videoCellSize", false, "2"]]);
         $this->output->checkParameters($this->getopt);
-        $this->board->setCell(0, 0, 1);
+        $this->board->setFieldValue(0, 0, 1);
         $this->output->write($this->board);
         $this->output->flush();
 

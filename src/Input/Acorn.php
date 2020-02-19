@@ -23,16 +23,16 @@ class Acorn extends Input
         $offsetX = floor($_board->width() / 2 - 7 / 2);
         $offsetY = floor($_board->height() / 2 - 3 / 2);
 
-        $_board->setCell(0 + $offsetX, 0 + $offsetY, 1);
-        $_board->setCell(1 + $offsetX, 0 + $offsetY, 1);
+        $_board->setFieldValue(0 + $offsetX, 0 + $offsetY, 1);
+        $_board->setFieldValue(1 + $offsetX, 0 + $offsetY, 1);
 
-        $_board->setCell(4 + $offsetX, 0 + $offsetY, 1);
-        $_board->setCell(5 + $offsetX, 0 + $offsetY, 1);
-        $_board->setCell(6 + $offsetX, 0 + $offsetY, 1);
+        $_board->setFieldValue(4 + $offsetX, 0 + $offsetY, 1);
+        $_board->setFieldValue(5 + $offsetX, 0 + $offsetY, 1);
+        $_board->setFieldValue(6 + $offsetX, 0 + $offsetY, 1);
 
-        $_board->setCell(3 + $offsetX, 1 + $offsetY, 1);
+        $_board->setFieldValue(3 + $offsetX, 1 + $offsetY, 1);
 
-        $_board->setCell(1 + $offsetX, 2 + $offsetY, 1);
+        $_board->setFieldValue(1 + $offsetX, 2 + $offsetY, 1);
     }
 
     /**

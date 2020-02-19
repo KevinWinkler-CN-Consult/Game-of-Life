@@ -62,7 +62,7 @@ class HistoryTest extends TestCase
     public function compareUnequalBoard()
     {
         $board = new Board(5, 5);
-        $board->setCell(0, 0, 1);
+        $board->setFieldValue(0, 0, 1);
         $this->assertNotTrue($this->history->compare($board));
     }
 }

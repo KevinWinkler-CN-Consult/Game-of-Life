@@ -41,8 +41,8 @@ class GameLogic
         {
             for ($x = 0; $x < $_board->width(); $x++)
             {
-                $cell = $_board->getCell($x, $y);
-                $nextState = $this->rule->apply($cell);
+                $field = $_board->field($x, $y);
+                $nextState = $this->rule->apply($field);
                 $buffer[$x][$y] = $nextState;
             }
         }
@@ -51,7 +51,7 @@ class GameLogic
         {
             for ($x = 0; $x < $_board->width(); $x++)
             {
-                $_board->setCell($x, $y, $buffer[$x][$y]);
+                $_board->setFieldValue($x, $y, $buffer[$x][$y]);
             }
         }
 

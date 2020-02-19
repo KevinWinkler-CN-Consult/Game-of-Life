@@ -31,13 +31,13 @@ class Glider extends Input
             $positionY = intval($arg[1]);
         }
 
-        $_board->setCell($positionX + 1, $positionY + 0, 1);
+        $_board->setFieldValue($positionX + 1, $positionY + 0, 1);
 
-        $_board->setCell($positionX + 2, $positionY + 1, 1);
+        $_board->setFieldValue($positionX + 2, $positionY + 1, 1);
 
-        $_board->setCell($positionX + 0, $positionY + 2, 1);
-        $_board->setCell($positionX + 1, $positionY + 2, 1);
-        $_board->setCell($positionX + 2, $positionY + 2, 1);
+        $_board->setFieldValue($positionX + 0, $positionY + 2, 1);
+        $_board->setFieldValue($positionX + 1, $positionY + 2, 1);
+        $_board->setFieldValue($positionX + 2, $positionY + 2, 1);
     }
 
     /**

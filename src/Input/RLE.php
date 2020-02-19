@@ -92,7 +92,7 @@ class RLE extends Input
             {
                 case 'o':
                     for ($x = $posX; $x < ($posX + $runCount); $x++)
-                        $_board->setCell($x + $offsetX, $posY + $offsetY, 1);
+                        $_board->setFieldValue($x + $offsetX, $posY + $offsetY, 1);
                     $posX += $runCount;
                     break;
                 case 'b':

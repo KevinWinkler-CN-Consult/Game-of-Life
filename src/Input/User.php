@@ -40,12 +40,12 @@ class User extends Input
 
             if (count($coordinates) == 3)
             {
-                $_board->setCell($coordinates[0], $coordinates[1], $coordinates[2]);
+                $_board->setFieldValue($coordinates[0], $coordinates[1], $coordinates[2]);
             }
 
             if (count($coordinates) == 2)
             {
-                $_board->setCell($coordinates[0], $coordinates[1], 1);
+                $_board->setFieldValue($coordinates[0], $coordinates[1], 1);
             }
         }
 

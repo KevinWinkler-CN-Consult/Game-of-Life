@@ -22,7 +22,8 @@ class Board
         $this->width = $_width;
         $this->height = $_height;
 
-        // initialize the board
+        // initialize the board with a one cell wide border
+        // to prevent out of bounds check on every neighbour calculation
         for ($y = 0; $y < $_height + 2; $y++)
         {
             for ($x = 0; $x < $_width + 2; $x++)
@@ -75,7 +76,7 @@ class Board
         {
             for ($x = 1; $x < $_board->width() + 1; $x++)
             {
-                if ($this->grid[$x][$y]->value() != $_board->getCell($x - 1, $y - 1)->value())
+                if ($this->grid[$x][$y]->value() != $_board->field($x - 1, $y - 1)->value())
                     $equal = false;
             }
         }
@@ -84,12 +85,12 @@ class Board
     }
 
     /**
-     * Changes the value of a cell.
-     * @param int $_x X position of the cell.
-     * @param int $_y Y position of the cell.
-     * @param int $_value new value of the cell.
+     * Changes the value of a field.
+     * @param int $_x X position of the field.
+     * @param int $_y Y position of the field.
+     * @param int $_value new value of the field.
      */
-    public function setCell($_x, $_y, $_value)
+    public function setFieldValue($_x, $_y, $_value)
     {
         if ($this->isOutOfBounds($_x, $_y))
             return;
@@ -98,12 +99,12 @@ class Board
     }
 
     /**
-     * Returns a cell at the given point.
-     * @param int $_x X position of the cell.
-     * @param int $_y Y position of the cell.
-     * @return Field|null The cell or null pointer on invalid coordinates.
+     * Returns a field at the given point.
+     * @param int $_x X position of the field.
+     * @param int $_y Y position of the field.
+     * @return Field|null The field or null pointer on invalid coordinates.
      */
-    public function getCell(int $_x, int $_y): ?Field
+    public function field(int $_x, int $_y): ?Field
     {
         if ($this->isOutOfBounds($_x, $_y))
             return null;
