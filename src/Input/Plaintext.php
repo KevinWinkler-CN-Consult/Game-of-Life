@@ -53,7 +53,7 @@ class Plaintext extends Input
             for ($i = 0; $i < strlen($line); $i++)
             {
                 if (substr($line, $i, 1) == 'O')
-                    $_board->setCell($i, $posY, 1);
+                    $_board->setFieldValue($i, $posY, 1);
             }
 
             $posY += 1;

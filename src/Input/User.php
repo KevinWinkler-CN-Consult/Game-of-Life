@@ -4,8 +4,8 @@ namespace GOL\Input;
 
 use GetOpt\Getopt;
 use GOL\Boards\Board;
-use GOL\Helper\Readline;
 use GOL\Output\Console;
+use Icecave\Isolator\IsolatorTrait;
 
 /**
  * User input
@@ -14,7 +14,7 @@ use GOL\Output\Console;
  */
 class User extends Input
 {
-    private $readline = null;
+    use IsolatorTrait;
 
     /**
      * Prepares a Board for usage.
@@ -28,24 +28,24 @@ class User extends Input
             "(Enter \"finish\" to continue.)\n";
 
         $output = new Console();
-        $this->readline = $this->readline != null ? $this->readline : new Readline();
 
         while (true)
         {
             $output->write($_board);
-            $line = $this->readline->readline("Cell >> ");
+            $line = $this->isolator()->readline("Cell >> ");
+
             if ($line == "finish")
                 break;
             $coordinates = explode(",", $line);
 
             if (count($coordinates) == 3)
             {
-                $_board->setCell($coordinates[0], $coordinates[1], $coordinates[2]);
+                $_board->setFieldValue($coordinates[0], $coordinates[1], $coordinates[2]);
             }
 
             if (count($coordinates) == 2)
             {
-                $_board->setCell($coordinates[0], $coordinates[1], 1);
+                $_board->setFieldValue($coordinates[0], $coordinates[1], 1);
             }
         }
 
@@ -58,14 +58,5 @@ class User extends Input
     public function description(): string
     {
         return "Allows to set the state of specific cells.";
-    }
-
-    /**
-     * Changes the readline object for test purposes.
-     * @param Readline $readline readline object to use.
-     */
-    public function setReadline($readline): void
-    {
-        $this->readline = $readline;
     }
 }

@@ -13,11 +13,11 @@ class History
     protected $previousBoards = [];
 
     /**
-     * @param Board $board First generation of the board.
+     * @param Board $_board First generation of the board.
      */
-    public function __construct(Board $board)
+    public function __construct(Board $_board)
     {
-        $this->push($board);
+        $this->push($_board);
     }
 
     /**
@@ -38,11 +38,20 @@ class History
 
     /**
      * Adds the board to the history.
-     * @param Board $board board to add.
+     * @param Board $_board board to add.
      */
-    public function push(Board $board)
+    public function push(Board $_board)
     {
-        $temp = clone $board;
+        $temp = new Board($_board->width(), $_board->height());
+
+        for ($y = 0; $y < $_board->height(); $y++)
+        {
+            for ($x = 0; $x < $_board->width(); $x++)
+            {
+                $temp->setFieldValue($x, $y, $_board->field($x, $y)->value());
+            }
+        }
+
         array_unshift($this->previousBoards, $temp);
     }
 

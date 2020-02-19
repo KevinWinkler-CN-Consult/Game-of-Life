@@ -2,9 +2,11 @@
 
 use GetOpt\GetOpt;
 use GOL\Boards\Board;
-use GOL\Boards\History;
+use GOL\GameLogic;
 use GOL\Input\Input;
 use GOL\Output\Output;
+use GOL\Rules\Rule;
+use GOL\Rules\StandardRule;
 
 require_once "../vendor/autoload.php";
 
@@ -16,14 +18,18 @@ $historyLength = 2;
 
 /**
  * @var Board $field
- * @var Input $inputs
+ * @var Input[] $inputs
  * @var Output $output
- * @var Output $outputs
+ * @var Output[] $outputs
+ * @var Rule $rule
+ * @var Rule[] $rules
  */
 $field = null;
 $inputs = [];
 $output = null;
 $outputs = [];
+$rule = null;
+$rules = [];
 
 $getOpt = new Getopt(
     [
@@ -38,7 +44,10 @@ $getOpt = new Getopt(
         [null, 'inputList', Getopt::NO_ARGUMENT, "Prints a list of all available inputs"],
 
         [null, 'output', Getopt::REQUIRED_ARGUMENT, "Specifies the output"],
-        [null, 'outputList', Getopt::NO_ARGUMENT, "Prints a list of all available output"]
+        [null, 'outputList', Getopt::NO_ARGUMENT, "Prints a list of all available output"],
+
+        [null, 'rule', Getopt::REQUIRED_ARGUMENT, "Specifies the rule"],
+        [null, 'ruleList', Getopt::NO_ARGUMENT, "Prints a list of all available rules"]
     ]);
 
 foreach ($files = glob("Input/*") as $file)
@@ -68,6 +77,21 @@ foreach ($files = glob("Output/*") as $file)
     {
         $outputs[$basename] = new $classname;
         $getOpt->addOptions(end($outputs)->register());
+    }
+}
+
+foreach ($files = glob("Rules/*") as $file)
+{
+    $basename = basename($file, ".php");
+    $classname = "\\GOL\\Rules\\" . $basename;
+
+    if ($basename == "Rule")
+        continue;
+
+    if (class_exists($classname))
+    {
+        $rules[$basename] = new $classname;
+        $getOpt->addOptions(end($rules)->register());
     }
 }
 
@@ -102,7 +126,15 @@ if ($getOpt->getOption("outputList"))
     }
     die;
 }
-
+if($getOpt->getOption("ruleList"))
+{
+    echo "Available rules\n";
+    foreach ($rules as $type => $out)
+    {
+        echo $type . " " . $out->description() . "\n";
+    }
+    die;
+}
 
 if ($getOpt->getOption('width'))
 {
@@ -155,13 +187,32 @@ if ($field == null)
 {
     $field = new Board($width, $height);
 
-    $field->setCell(1, 0, 1);
+    $field->setFieldValue(1, 0, 1);
 
-    $field->setCell(2, 1, 1);
+    $field->setFieldValue(2, 1, 1);
 
-    $field->setCell(0, 2, 1);
-    $field->setCell(1, 2, 1);
-    $field->setCell(2, 2, 1);
+    $field->setFieldValue(0, 2, 1);
+    $field->setFieldValue(1, 2, 1);
+    $field->setFieldValue(2, 2, 1);
+}
+
+if ($getOpt->getOption("rule"))
+{
+    $arg = $getOpt->getOption("rule");
+
+    foreach ($rules as $type => $r)
+    {
+        if ($type == $arg)
+        {
+            $r->initialize($getOpt);
+            $rule = $r;
+            break;
+        }
+    }
+}
+else
+{
+    $rule = new StandardRule();
 }
 
 if ($output == null)
@@ -170,20 +221,15 @@ if ($output == null)
     die;
 }
 
-$history = new History($field);
+$logic = new GameLogic($field,$rule);
 
 for ($i = 0; $i < $maxIteration; $i++)
 {
     $output->write($field);
-    $field->nextGeneration();
+    $logic->nextGeneration($field);
 
-    if ($history->stackSize() > $historyLength)
-        $history->removeOldestBoard();
-
-    if ($history->compare($field))
+    if ($logic->isLooping())
         break;
-
-    $history->push($field);
 }
 
 $output->flush();

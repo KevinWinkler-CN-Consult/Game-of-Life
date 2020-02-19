@@ -2,8 +2,8 @@
 
 namespace Input;
 
+use GetOpt\GetOpt;
 use GetOpt\Option;
-use GetOptMock;
 use GOL\Boards\Board;
 use GOL\Input\Random;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +16,7 @@ class RandomTest extends TestCase
     protected function setUp(): void
     {
         $this->input = new Random();
-        $this->getOpt = new GetOptMock();
+        $this->getOpt = $this->createMock(GetOpt::class);
     }
 
     private function isGridZero($_grid)
@@ -51,7 +51,9 @@ class RandomTest extends TestCase
     public function prepareBoardWithDensity90()
     {
         $board = new Board(5, 5);
-        $this->getOpt->setOptions(["randomDensity" => "90"]);
+        $this->getOpt->method("getOption")
+                     ->with("randomDensity")
+                     ->willReturn("90");
 
         $this->input->prepareBoard($board, $this->getOpt);
 
@@ -77,7 +79,9 @@ class RandomTest extends TestCase
     public function prepareBoardWithDensity0()
     {
         $board = new Board(5, 5);
-        $this->getOpt->setOptions(["randomDensity" => "0"]);
+        $this->getOpt->method("getOption")
+                     ->with("randomDensity")
+                     ->willReturn("0");
         $array = [
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],

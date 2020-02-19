@@ -32,7 +32,7 @@ class ConsoleTest extends TestCase
     public function writeBoard()
     {
         $this->expectOutputString("O----\n-----\n-----\n-----\n-----\n\n");
-        $this->board->setCell(0, 0, 1);
+        $this->board->setFieldValue(0, 0, 1);
         $this->output->write($this->board);
     }
 

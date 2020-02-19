@@ -2,23 +2,24 @@
 
 namespace Input;
 
-require_once "ReadlineMock.php";
-
-use GetOptMock;
+use GetOpt\GetOpt;
 use GOL\Boards\Board;
 use GOL\Input\User;
+use Icecave\Isolator\Isolator;
 use PHPUnit\Framework\TestCase;
-use ReadlineMock;
 
 class UserTest extends TestCase
 {
     protected $input;
     protected $getOpt;
+    protected $readline;
 
     protected function setUp(): void
     {
         $this->input = new User();
-        $this->getOpt = new GetOptMock();
+        $this->getOpt = $this->createMock(GetOpt::class);
+        $this->readline = $this->createMock(Isolator::class);
+        $this->input->setIsolator($this->readline);
     }
 
     /**
@@ -33,10 +34,10 @@ class UserTest extends TestCase
             [0, 0, 0]
         ];
 
-        $readline = new ReadlineMock();
-        $readline->setLines(["finish"]);
+        $this->readline->method("readline")
+                       ->with($this->anything())
+                       ->willReturn("finish");
 
-        $this->input->setReadline($readline);
         $this->input->prepareBoard($board, $this->getOpt);
 
         $this->assertEquals($array, $board->getGrid());
@@ -54,13 +55,10 @@ class UserTest extends TestCase
             [0, 0, 0]
         ];
 
-        $readline = new ReadlineMock();
-        $readline->setLines([
-                                "1,1",
-                                "finish"
-                            ]);
+        $this->readline->method("readline")
+                       ->with($this->anything())
+                       ->willReturnOnConsecutiveCalls("1,1","finish");
 
-        $this->input->setReadline($readline);
         $this->input->prepareBoard($board, $this->getOpt);
 
         $this->assertEquals($array, $board->getGrid());
@@ -78,13 +76,10 @@ class UserTest extends TestCase
             [0, 0, 0]
         ];
 
-        $readline = new ReadlineMock();
-        $readline->setLines([
-                                "1,1,1",
-                                "finish"
-                            ]);
+        $this->readline->method("readline")
+                       ->with($this->anything())
+                       ->willReturnOnConsecutiveCalls("1,1,1","finish");
 
-        $this->input->setReadline($readline);
         $this->input->prepareBoard($board, $this->getOpt);
 
         $this->assertEquals($array, $board->getGrid());
@@ -101,14 +96,11 @@ class UserTest extends TestCase
             [0, 0, 0],
             [0, 0, 0]
         ];
+        $this->readline->method("readline")
+                       ->with($this->anything())
+                       ->willReturn("1,3,1")
+                       ->willReturn("finish");
 
-        $readline = new ReadlineMock();
-        $readline->setLines([
-                                "1,3,1",
-                                "finish"
-                            ]);
-
-        $this->input->setReadline($readline);
         $this->input->prepareBoard($board, $this->getOpt);
 
         $this->assertEquals($array, $board->getGrid());

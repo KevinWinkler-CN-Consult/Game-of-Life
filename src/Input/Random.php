@@ -29,7 +29,7 @@ class Random extends Input
         {
             for ($x = 0; $x < $_board->width(); $x++)
             {
-                $_board->setCell($x, $y, (rand(0, 99) < $density ? 1 : 0));
+                $_board->setFieldValue($x, $y, (rand(0, 99) < $density ? 1 : 0));
             }
         }
     }

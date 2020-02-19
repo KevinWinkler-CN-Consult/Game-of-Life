@@ -2,11 +2,12 @@
 
 namespace GOL\Output;
 
-require_once "seasonal.php";
 
 use GetOpt\Getopt;
 use GetOpt\Option;
 use GOL\Boards\Board;
+use GOL\Seasonal;
+use Icecave\Isolator\IsolatorTrait;
 
 /**
  * Saves the Board as a png sequence.
@@ -16,6 +17,8 @@ use GOL\Boards\Board;
  */
 class Png extends Output
 {
+    use IsolatorTrait;
+
     private $index = 0;
     private $cellSize = 1;
     private $backgroundColor = [];
@@ -62,7 +65,7 @@ class Png extends Output
         if ($this->cellSize <= 0)
             $this->cellSize = 1;
 
-        $seasonalColor = getHolidayColor($this->clock);
+        $seasonalColor = Seasonal::getHolidayColor();
 
         if (count($seasonalColor) == 6)
         {

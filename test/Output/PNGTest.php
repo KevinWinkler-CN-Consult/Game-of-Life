@@ -1,15 +1,12 @@
 <?php
 
-namespace Output;
+namespace Test\Output;
 
-require_once "ClockMock.php";
-
-use ClockMock;
+use GetOpt\GetOpt;
 use GetOpt\Option;
-use GetOptMock;
 use GOL\Boards\Board;
-use GOL\Helper\Clock;
 use GOL\Output\Png;
+use phpmock\phpunit\PHPMock;
 use PHPUnit\Framework\TestCase;
 
 class PNGTest extends TestCase
@@ -17,12 +14,16 @@ class PNGTest extends TestCase
     protected $output;
     protected $board;
     protected $getopt;
+    protected $time;
+
+    use PHPMock;
 
     protected function setUp(): void
     {
         $this->output = new Png();
         $this->board = new Board(5, 5);
-        $this->getopt = new GetOptMock();
+        $this->getopt = $this->createMock(GetOpt::class);
+        $this->time = $this->getFunctionMock("GOL","date");
     }
 
     /**
@@ -30,7 +31,6 @@ class PNGTest extends TestCase
      */
     public function writeEmptyBoard()
     {
-        $this->expectOutputString("");
         $this->output->checkParameters($this->getopt);
         $this->output->write($this->board);
         $this->output->flush();
@@ -48,7 +48,8 @@ class PNGTest extends TestCase
      */
     public function writeEmptyBoardWithDifferentColors()
     {
-        $this->getopt->setOptions(["pngBackgroundColor" => "255,255,255", "pngCellColor" => "0,0,0"]);
+        $this->getopt->method("getOption")
+                     ->willReturnMap([["pngBackgroundColor", false, "255,255,255"], ["pngCellColor", false, "0,0,0"]]);
         $this->output->checkParameters($this->getopt);
         $this->output->write($this->board);
         $this->output->flush();
@@ -66,9 +67,10 @@ class PNGTest extends TestCase
      */
     public function writeBoardWithHolidayColors()
     {
-        $this->output->overrideClock(new ClockMock("31-10"));
+        $this->time->expects($this->any())->willReturn("31-10");
         $this->output->checkParameters($this->getopt);
-        $this->board->setCell(0, 0, 1);
+
+        $this->board->setFieldValue(0, 0, 1);
         $this->output->write($this->board);
         $this->output->flush();
 
@@ -86,10 +88,11 @@ class PNGTest extends TestCase
      */
     public function writeBoardWithNoHolidayColorsIfCustomColorIsSet()
     {
-        $this->getopt->setOptions(["pngBackgroundColor" => "255,255,255", "pngCellColor" => "0,0,0"]);
-        $this->output->overrideClock(new ClockMock("31-10"));
+        $this->getopt->method("getOption")
+                     ->willReturnMap([["pngBackgroundColor", false, "255,255,255"], ["pngCellColor", false, "0,0,0"]]);
+        $this->time->expects($this->any())->willReturn("31-10");
         $this->output->checkParameters($this->getopt);
-        $this->board->setCell(0, 0, 1);
+        $this->board->setFieldValue(0, 0, 1);
         $this->output->write($this->board);
         $this->output->flush();
 
@@ -107,9 +110,10 @@ class PNGTest extends TestCase
      */
     public function writeBoardWithDifferentCellSize()
     {
-        $this->getopt->setOptions(["pngCellSize" => "2"]);
+        $this->getopt->method("getOption")
+                     ->willReturnMap([["pngCellSize", false, "2"]]);
         $this->output->checkParameters($this->getopt);
-        $this->board->setCell(0, 0, 1);
+        $this->board->setFieldValue(0, 0, 1);
         $this->output->write($this->board);
         $this->output->flush();
 
@@ -132,7 +136,7 @@ class PNGTest extends TestCase
     {
 
         $this->output->checkParameters($this->getopt);
-        $this->board->setCell(0, 0, 1);
+        $this->board->setFieldValue(0, 0, 1);
         $this->output->write($this->board);
         $this->output->flush();
 
@@ -150,9 +154,10 @@ class PNGTest extends TestCase
      */
     public function writeBoardWithDifferentColors()
     {
-        $this->getopt->setOptions(["pngBackgroundColor" => "255,255,255", "pngCellColor" => "0,0,0"]);
+        $this->getopt->method("getOption")
+                     ->willReturnMap([["pngBackgroundColor", false, "255,255,255"], ["pngCellColor", false, "0,0,0"]]);
         $this->output->checkParameters($this->getopt);
-        $this->board->setCell(0, 0, 1);
+        $this->board->setFieldValue(0, 0, 1);
         $this->output->write($this->board);
         $this->output->flush();
 

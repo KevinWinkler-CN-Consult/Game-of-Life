@@ -2,9 +2,7 @@
 
 namespace Input;
 
-require_once "GetOptMock.php";
-
-use GetOptMock;
+use GetOpt\GetOpt;
 use GOL\Boards\Board;
 use GOL\Input\Acorn;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +15,7 @@ class AcornTest extends TestCase
     protected function setUp(): void
     {
         $this->input = new Acorn();
-        $this->getOpt = new GetOptMock();
+        $this->getOpt = $this->createMock(GetOpt::class);
     }
 
     /**

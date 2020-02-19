@@ -5,7 +5,7 @@ namespace GOL\Boards;
 /**
  * Represents a Game of Life world.
  *
- * Use print() to print the board and nextGeneration() to calculate the next generation.
+ * Use countLivingNeighbours() to calculate the number of living neighbours and compare() to compare two boards.
  */
 class Board
 {
@@ -22,85 +22,37 @@ class Board
         $this->width = $_width;
         $this->height = $_height;
 
-        // initialize the board
+        // initialize the board with a one cell wide border
+        // to prevent out of bounds check on every neighbour calculation
         for ($y = 0; $y < $_height + 2; $y++)
         {
             for ($x = 0; $x < $_width + 2; $x++)
             {
-                $this->grid[$x][$y] = 0;
+                $this->grid[$x][$y] = new Field($this, $x - 1, $y - 1);
             }
         }
-    }
-
-    /**
-     * Runs the Game of Life algorithm.
-     */
-    public function nextGeneration()
-    {
-        $buffer = $this->grid;
-
-        for ($y = 1; $y < $this->height + 1; $y++)
-        {
-            for ($x = 1; $x < $this->width + 1; $x++)
-            {
-                $buffer[$x][$y] = $this->applyRule($this->countLivingNeighbours($x, $y), $this->grid[$x][$y]);
-            }
-        }
-
-        $this->grid = $buffer;
-    }
-
-    /**
-     * @param int $_numNeighbours Number of living cells in the neighbourhood.
-     * @param bool $_isAlive State of the current cell.
-     * @return int State of the cell in the next generation.
-     */
-    private function applyRule($_numNeighbours, $_isAlive)
-    {
-        $survival = [2, 3];
-        $birth = [3];
-
-        if ($_isAlive)
-        {
-            foreach ($survival as $s)
-            {
-                if ($_numNeighbours == $s)
-                    return 1;
-            }
-        }
-        else
-        {
-            foreach ($birth as $b)
-            {
-                if ($_numNeighbours == $b)
-                    return 1;
-            }
-        }
-
-        return 0;
     }
 
     /**
      * Returns the amount of living cells in the neighbourhood of a specific cell.
      *
-     * No out of bound check due to the margin.
-     *
-     * @param int $_x y coordinate of the specific cell.
-     * @param int $_y y coordinate of the specific cell.
-     * @return int amount of living cells and -1 if given cell is out of bounds.
+     * @param Field $_field Field who's neighbours should be calculated.
+     * @return int Amount of living cells and -1 if given cell is out of bounds.
      */
-    private function countLivingNeighbours($_x, $_y)
+    public function countLivingNeighbours(Field $_field)
     {
         $livingNeighbourCount = -1;
-        // out of bounds and margin check
-        if ($_x >= 1 and $_y >= 1 and $_x < $this->width and $_y < $this->height)
+        $x = $_field->x();
+        $y = $_field->y();
+
+        if (!$this->isOutOfBounds($x, $y))
         {
             $relativeNeighbourIndices = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
             $livingNeighbourCount++;
 
             foreach ($relativeNeighbourIndices as $relativeNeighbour)
             {
-                if ($this->grid[$_x + $relativeNeighbour[0]][$_y + $relativeNeighbour[1]] == 1)
+                if ($this->grid[$x + $relativeNeighbour[0] + 1][$y + $relativeNeighbour[1] + 1]->value() == 1)
                     $livingNeighbourCount++;
             }
         }
@@ -108,10 +60,10 @@ class Board
     }
 
     /**
-     * Compares the current board with the history.
+     * Compares the board with another board.
      *
      * @param Board $_board board to check.
-     * @return bool true if one of the previous boards is equal to to current board, false otherwise.
+     * @return bool true if both boards are equal, false otherwise.
      */
     public function compare(Board $_board)
     {
@@ -124,7 +76,7 @@ class Board
         {
             for ($x = 1; $x < $_board->width() + 1; $x++)
             {
-                if ($this->grid[$x][$y] != $_board->grid[$x][$y])
+                if ($this->grid[$x][$y]->value() != $_board->field($x - 1, $y - 1)->value())
                     $equal = false;
             }
         }
@@ -133,17 +85,31 @@ class Board
     }
 
     /**
-     * Changes the value of a cell.
-     * @param int $_x X position of the cell.
-     * @param int $_y Y position of the cell.
-     * @param int $_value new value of the cell.
+     * Changes the value of a field.
+     * @param int $_x X position of the field.
+     * @param int $_y Y position of the field.
+     * @param int $_value new value of the field.
      */
-    public function setCell($_x, $_y, $_value)
+    public function setFieldValue($_x, $_y, $_value)
     {
-        if ($_x < 0 || $_y < 0 || $_x >= $this->width || $_y >= $this->height)
+        if ($this->isOutOfBounds($_x, $_y))
             return;
 
-        $this->grid[$_x + 1][$_y + 1] = $_value;
+        $this->grid[$_x + 1][$_y + 1]->setValue($_value);
+    }
+
+    /**
+     * Returns a field at the given point.
+     * @param int $_x X position of the field.
+     * @param int $_y Y position of the field.
+     * @return Field|null The field or null pointer on invalid coordinates.
+     */
+    public function field(int $_x, int $_y): ?Field
+    {
+        if ($this->isOutOfBounds($_x, $_y))
+            return null;
+
+        return $this->grid[$_x + 1][$_y + 1];
     }
 
     /**
@@ -158,7 +124,7 @@ class Board
         {
             for ($x = 1; $x < $this->width + 1; $x++)
             {
-                $result[$x - 1][$y - 1] = $this->grid[$x][$y];
+                $result[$x - 1][$y - 1] = $this->grid[$x][$y]->value();
             }
         }
 
@@ -181,5 +147,16 @@ class Board
     public function height()
     {
         return $this->height;
+    }
+
+    /**
+     * Checks if a coordinate is out of bounds.
+     * @param int $_x X position to check.
+     * @param int $_y Y position to check.
+     * @return bool True on out of bounds, otherwise false.
+     */
+    private function isOutOfBounds(int $_x, int $_y): bool
+    {
+        return $_x < 0 || $_y < 0 || $_x >= $this->width || $_y >= $this->height;
     }
 }

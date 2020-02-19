@@ -2,8 +2,8 @@
 
 namespace Input;
 
+use GetOpt\GetOpt;
 use GetOpt\Option;
-use GetOptMock;
 use GOL\Boards\Board;
 use GOL\Input\Plaintext;
 use PHPUnit\Framework\TestCase;
@@ -16,17 +16,16 @@ class PlaintextTest extends TestCase
     protected function setUp(): void
     {
         $this->input = new Plaintext();
-        $this->getOpt = new GetOptMock();
-
+        $this->getOpt = $this->createMock(GetOpt::class);
         $file = fopen("in/plain.cells", "w");
         fwrite($file,
-               '!Name: Glider
-!Author: Richard K. Guy
-!The smallest, most common, and first discovered spaceship.
-!www.conwaylife.com/wiki/index.php?title=Glider
-.O
-O.O
-OOO');
+               "!Name: Glider\n" .
+               "!Author: Richard K. Guy\n" .
+               "!The smallest, most common, and first discovered spaceship.\n" .
+               "!www.conwaylife.com/wiki/index.php?title=Glider\n" .
+               ".O\n" .
+               "O.O\n" .
+               "OOO\n");
         fclose($file);
     }
 
@@ -53,7 +52,9 @@ OOO');
      */
     public function prepareBoardWithArgument()
     {
-        $this->getOpt->setOptions(["plaintextFile" => "in/plain.cells"]);
+        $this->getOpt->method("getOption")
+                     ->with("plaintextFile")
+                     ->willReturn("in/plain.cells");
 
         $board = new Board(5, 5);
         $array = [
@@ -73,7 +74,9 @@ OOO');
      */
     public function prepareSmallBoardWithArgument()
     {
-        $this->getOpt->setOptions(["plaintextFile" => "in/plain.cells"]);
+        $this->getOpt->method("getOption")
+                     ->with("plaintextFile")
+                     ->willReturn("in/plain.cells");
 
         $board = new Board(2, 2);
         $array = [

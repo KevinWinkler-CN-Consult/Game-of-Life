@@ -3,6 +3,7 @@
 namespace Boards;
 
 use GOL\Boards\Board;
+use GOL\Boards\Field;
 use PHPUnit\Framework\TestCase;
 
 class BoardTest extends TestCase
@@ -61,7 +62,7 @@ class BoardTest extends TestCase
      */
     public function setCellCreatesNonEmptyGrid()
     {
-        $this->board->setCell(0, 0, 1);
+        $this->board->setFieldValue(0, 0, 1);
         $grid = $this->board->getGrid();
 
         $isEmpty = $this->isGridZero($grid);
@@ -74,7 +75,7 @@ class BoardTest extends TestCase
      */
     public function setCellOutOfBoundCreatesNonEmptyGrid()
     {
-        $this->board->setCell(-1, 0, 1);
+        $this->board->setFieldValue(-1, 0, 1);
         $grid = $this->board->getGrid();
 
         $isEmpty = $this->isGridZero($grid);
@@ -97,7 +98,7 @@ class BoardTest extends TestCase
     public function compareNotEqualBoardsReturnsTrue()
     {
         $nonEmptyBoard = new Board(5, 5);
-        $nonEmptyBoard->setCell(0, 0, 1);
+        $nonEmptyBoard->setFieldValue(0, 0, 1);
         $this->assertNotTrue($this->board->compare($nonEmptyBoard));
     }
 
@@ -122,26 +123,39 @@ class BoardTest extends TestCase
     /**
      * @test
      */
-    public function emptyBoardYieldsEmptyBoardAfterNextGeneration()
+    public function getEmptyCell()
     {
-        $emptyBoard = new Board(5, 5);
-        $this->board->nextGeneration();
-        $this->assertTrue($this->board->compare($emptyBoard));
+        $this->board->field(0, 0);
+        $this->assertTrue(true);
     }
 
     /**
      * @test
      */
-    public function fieldWithOscillatorCreatesNonEmptyWorldAfterNextGeneration()
+    public function getOutOfBoundsCellReturnsNull()
     {
-        $emptyBoard = new Board(5, 5);
+        $this->assertNull($this->board->field(-1, -1));
+        $this->assertNull($this->board->field(10, 10));
+    }
 
-        $this->board->setCell(1, 1, 1);
-        $this->board->setCell(2, 1, 1);
-        $this->board->setCell(3, 1, 1);
+    /**
+     * @test
+     */
+    public function getNeighbours()
+    {
+        $this->board->setFieldValue(0, 0, 1);
+        $cell = $this->board->field(1, 1);
 
-        $this->board->nextGeneration();
+        $this->assertEquals(1, $this->board->countLivingNeighbours($cell));
+    }
 
-        $this->assertTrue(!$this->board->compare($emptyBoard));
+    /**
+     * @test
+     */
+    public function getNeighboursOfAnOutOfBoundsCell()
+    {
+        $cell = new Field($this->board, -1, -1);
+
+        $this->assertEquals(-1, $this->board->countLivingNeighbours($cell));
     }
 }
